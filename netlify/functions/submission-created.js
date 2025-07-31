@@ -1,31 +1,58 @@
 exports.handler = async (event, context) => {
+  console.log('Function triggered!');
+  console.log('Event:', JSON.stringify(event, null, 2));
+  
   // Only run for form submissions
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    // Parse the form submission data
-    const { payload } = JSON.parse(event.body);
-    console.log('Form submission received:', payload.data);
+    console.log('Raw event body:', event.body);
+    
+    // Parse the Netlify form submission
+    let formData;
+    
+    // Check if it's JSON or form data
+    if (event.headers['content-type'] && event.headers['content-type'].includes('application/json')) {
+      const payload = JSON.parse(event.body);
+      formData = payload.data || payload;
+    } else {
+      // Parse URL-encoded form data
+      const params = new URLSearchParams(event.body);
+      formData = {};
+      for (const [key, value] of params) {
+        formData[key] = value;
+      }
+    }
+    
+    console.log('Parsed form data:', formData);
 
-    // Extract form data
-    const formData = {
-      first_name: payload.data.firstName || '',
-      last_name: payload.data.lastName || '',
-      email: payload.data.email || '',
-      phone: payload.data.phone || '',
-      address: payload.data.address || '',
-      zip_code: payload.data.propertyType ? payload.data.address.split(' ').pop() : '', // Extract zip from address
-      property_type: payload.data.propertyType || '',
-      timeline: payload.data.timeline || '',
-      details: payload.data.details || '',
-      photo_urls: payload.data['photo-urls'] || '',
-      price: 39.99, // Default price
+    // Extract zip code from address
+    function extractZipCode(address) {
+      if (!address) return '';
+      const zipMatch = address.match(/\b\d{5}(-\d{4})?\b/);
+      return zipMatch ? zipMatch[0] : '';
+    }
+
+    // Create lead object for Supabase
+    const leadData = {
+      first_name: formData.firstName || formData.first_name || '',
+      last_name: formData.lastName || formData.last_name || '',
+      email: formData.email || '',
+      phone: formData.phone || '',
+      address: formData.address || '',
+      zip_code: extractZipCode(formData.address) || '',
+      property_type: formData.propertyType || formData.property_type || '',
+      timeline: formData.timeline || '',
+      details: formData.details || '',
+      photo_urls: formData['photo-urls'] || formData.photo_urls || '',
+      price: 39.99,
       purchased: false,
-      purchased_by: null,
-      created_at: new Date().toISOString()
+      purchased_by: null
     };
+
+    console.log('Sending to Supabase:', leadData);
 
     // Insert into Supabase
     const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/leads`, {
@@ -36,7 +63,7 @@ exports.handler = async (event, context) => {
         'Content-Type': 'application/json',
         'Prefer': 'return=minimal'
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(leadData)
     });
 
     if (!response.ok) {
@@ -49,9 +76,12 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ 
         message: 'Lead saved successfully',
-        leadData: formData 
+        leadData: leadData 
       })
     };
 
