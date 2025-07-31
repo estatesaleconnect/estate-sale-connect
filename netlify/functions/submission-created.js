@@ -55,7 +55,7 @@ exports.handler = async (event, context) => {
     console.log('Sending to Supabase:', leadData);
 
     // Insert into Supabase
-    const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/leads`, {
+    const response = await fetch(`${process.env.SUPABASE_URL}/rest/v1/Leads`, {
       method: 'POST',
       headers: {
         'apikey': process.env.SUPABASE_ANON_KEY,
