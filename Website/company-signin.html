@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Sign In - Estate Sale Connect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #fafafa;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link {
+            color: #6b6b6b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #1a1a1a;
+        }
+
+        /* Main Content */
+        .signin-container {
+            display: flex;
+            min-height: calc(100vh - 100px);
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .signin-box {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e8e8e8;
+            padding: 48px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .signin-header {
+            margin-bottom: 32px;
+        }
+
+        .signin-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .signin-header p {
+            color: #6b6b6b;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .signin-form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d1d1;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a1a1a;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+        }
+
+        .signin-btn {
+            width: 100%;
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .signin-btn:hover {
+            background: #333333;
+        }
+
+        .signin-btn:active {
+            transform: translateY(1px);
+        }
+
+        .signin-btn:disabled {
+            background: #d1d1d1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .forgot-password a {
+            color: #6b6b6b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #1a1a1a;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .signup-link p {
+            color: #6b6b6b;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .signup-btn {
+            color: #1a1a1a;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .signup-btn:hover {
+            color: #333333;
+        }
+
+        /* Error/Success Messages */
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .signin-box {
+                padding: 32px 24px;
+                margin: 20px;
+            }
+
+            .signin-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">ESTATE SALE CONNECT</div>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="signin-container">
+        <div class="signin-box">
+            <div class="signin-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to access your lead marketplace</p>
+            </div>
+
+            <!-- Error/Success Messages -->
+            <div id="messageContainer"></div>
+
+            <form class="signin-form" id="signinForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="signin-btn" id="signinBtn">
+                    Sign In
+                </button>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="handleForgotPassword()">Forgot your password?</a>
+                </div>
+            </form>
+
+            <div class="signup-link">
+                <p>Don't have an account?</p>
+                <a href="#" class="signup-btn" onclick="handleSignup()">Request Company Access</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Demo credentials for testing
+        const DEMO_CREDENTIALS = {
+            'demo@estatesales.com': 'demo123',
+            'premium@estatesales.com': 'premium123',
+            'charlotte@estatesales.com': 'charlotte123'
+        };
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('signinForm');
+            form.addEventListener('submit', handleSignin);
+
+            // Add demo credentials info for testing
+            showMessage('Demo: Use demo@estatesales.com / demo123', 'info');
+        });
+
+        // Handle sign in form submission
+        function handleSignin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('signinBtn');
+
+            // Basic validation
+            if (!email || !password) {
+                showMessage('Please fill in all fields', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span>Signing in...';
+
+            // Simulate authentication delay
+            setTimeout(() => {
+                // Check demo credentials
+                if (DEMO_CREDENTIALS[email] && DEMO_CREDENTIALS[email] === password) {
+                    showMessage('Sign in successful! Redirecting...', 'success');
+                    
+                    // Store user session (in production, use proper JWT tokens)
+                    sessionStorage.setItem('company_user', JSON.stringify({
+                        email: email,
+                        company: getCompanyName(email),
+                        loginTime: new Date().toISOString()
+                    }));
+
+                    // Redirect to portal after short delay
+                    setTimeout(() => {
+                        window.location.href = 'company-portal.html';
+                    }, 1500);
+                } else {
+                    showMessage('Invalid email or password', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Sign In';
+                }
+            }, 1000);
+        }
+
+        // Helper function to get company name from email
+        function getCompanyName(email) {
+            const companyMap = {
+                'demo@estatesales.com': 'Demo Estate Sales',
+                'premium@estatesales.com': 'Premium Estate Sales',
+                'charlotte@estatesales.com': 'Charlotte Estate Solutions'
+            };
+            return companyMap[email] || 'Estate Sale Company';
+        }
+
+        // Show messages to user
+        function showMessage(text, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const messageClass = type === 'error' ? 'message error' : 
+                                type === 'success' ? 'message success' : 
+                                'message';
+            
+            container.innerHTML = `<div class="${messageClass}">${text}</div>`;
+            
+            // Auto-hide info messages after 5 seconds
+            if (type === 'info') {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                }, 5000);
+            }
+        }
+
+        // Handle forgot password
+        function handleForgotPassword() {
+            showMessage('Password reset functionality coming soon. Contact support for assistance.', 'info');
+        }
+
+        // Handle signup request
+        function handleSignup() {
+            showMessage('New company registration is by approval only. Contact us to request access.', 'info');
+        }
+
+        // Check if user is already logged in
+        function checkExistingSession() {
+            const user = sessionStorage.getItem('company_user');
+            if (user) {
+                const userData = JSON.parse(user);
+                const loginTime = new Date(userData.loginTime);
+                const now = new Date();
+                const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60);
+                
+                // If logged in within last 24 hours, redirect to portal
+                if (hoursSinceLogin < 24) {
+                    window.location.href = 'company-portal.html';
+                }
+            }
+        }
+
+        // Check for existing session on page load
+        checkExistingSession();
+    </script>
+</body>
+</html>
