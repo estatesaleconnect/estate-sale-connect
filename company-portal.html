@@ -587,8 +587,13 @@
             <div class="leads-section">
                 <div class="section-header">
                     <h2 class="section-title">Available Estate Sale Leads</h2>
-                    <div style="color: #6b7280; font-size: 0.9rem;">
-                        Showing <span id="resultCount">24</span> leads
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <button onclick="refreshLeads()" style="background: #10b981; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                            🔄 Refresh
+                        </button>
+                        <div style="color: #6b7280; font-size: 0.9rem;">
+                            Showing <span id="resultCount">0</span> leads
+                        </div>
                     </div>
                 </div>
 
@@ -612,78 +617,75 @@
     </main>
 
     <script>
-        // Sample lead data - In production, this would come from your database
-        const sampleLeads = [
-            {
-                id: 'lead_001',
-                firstName: 'Available after purchase',
-                lastName: '',
-                email: 'Available after purchase',
-                phone: 'Available after purchase',
-                address: 'Available after purchase',
-                zipCode: '28202',
-                propertyType: 'house',
-                timeline: 'asap',
-                details: 'Large estate sale needed for deceased parent\'s home. Lots of antiques, furniture, and collectibles. House is 3,000 sq ft with full basement and attic.',
-                photos: [
-                    'https://res.cloudinary.com/dfy6vlrtn/image/upload/v1753996419/image0_ksilse.jpg',
-                    'https://res.cloudinary.com/dfy6vlrtn/image/upload/v1753996420/image1_abc123.jpg'
-                ],
-                dateSubmitted: '2024-07-31',
-                price: 49.99,
-                purchased: false,
-                coordinates: { lat: 35.2271, lng: -80.8431 }
-            },
-            {
-                id: 'lead_002',
-                firstName: 'Available after purchase',
-                lastName: '',
-                email: 'Available after purchase',
-                phone: 'Available after purchase',
-                address: 'Available after purchase',
-                zipCode: '28025',
-                propertyType: 'condo',
-                timeline: 'month',
-                details: 'Downsizing sale for retirement community move. Quality furniture, artwork, and household items. Clean, organized condo.',
-                photos: [],
-                dateSubmitted: '2024-07-30',
-                price: 39.99,
-                purchased: false,
-                coordinates: { lat: 35.4088, lng: -80.5795 }
-            },
-            {
-                id: 'lead_003',
-                firstName: 'Available after purchase',
-                lastName: '',
-                email: 'Available after purchase',
-                phone: 'Available after purchase',
-                address: 'Available after purchase',
-                zipCode: '28105',
-                propertyType: 'house',
-                timeline: 'flexible',
-                details: 'Moving sale - relocating for job. Modern furniture, electronics, and household goods. Everything must go.',
-                photos: [
-                    'https://res.cloudinary.com/dfy6vlrtn/image/upload/v1753996421/image2_def456.jpg'
-                ],
-                dateSubmitted: '2024-07-29',
-                price: 44.99,
-                purchased: true,
-                coordinates: { lat: 35.1168, lng: -80.7237 }
-            }
-        ];
-
         // Global variables
-        let currentLeads = [...sampleLeads];
-        let filteredLeads = [...sampleLeads];
+        let currentLeads = [];
+        let filteredLeads = [];
         let currentPage = 1;
         const leadsPerPage = 12;
 
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ftvkkpazzrrlxysocutp.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJseHlzb2N1dHAiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczNzUzMjMzMywiZXhwIjoyMDUzMTA4MzMzfQ.eV3MbGc1QiIUz1iNIsInR5cCI6IkpXVCJ9';
+
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
-            displayLeads();
-            updateStats();
+            loadLeadsFromDatabase();
             setupEventListeners();
         });
+
+        // Load leads from Supabase
+        async function loadLeadsFromDatabase() {
+            try {
+                showLoading();
+                console.log('Loading leads from database...');
+                
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?select=*&order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const leads = await response.json();
+                console.log('Loaded leads:', leads);
+                
+                // Transform database leads to match portal format
+                currentLeads = leads.map(lead => ({
+                    id: lead.id,
+                    firstName: lead.purchased ? lead.first_name : 'Available after purchase',
+                    lastName: lead.purchased ? lead.last_name : '',
+                    email: lead.purchased ? lead.email : 'Available after purchase',
+                    phone: lead.purchased ? lead.phone : 'Available after purchase',
+                    address: lead.purchased ? lead.address : 'Available after purchase',
+                    zipCode: lead.zip_code,
+                    propertyType: lead.property_type,
+                    timeline: lead.timeline,
+                    details: lead.details,
+                    photos: lead.photo_urls ? lead.photo_urls.split(' ').filter(url => url.trim()) : [],
+                    dateSubmitted: lead.created_at ? lead.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                    price: lead.price || 39.99,
+                    purchased: lead.purchased || false,
+                    purchasedBy: lead.purchased_by,
+                    // For filtering - extract coordinates from zip if needed
+                    coordinates: { lat: 0, lng: 0 }
+                }));
+
+                filteredLeads = [...currentLeads];
+                hideLoading();
+                displayLeads();
+                updateStats();
+                
+            } catch (error) {
+                console.error('Error loading leads:', error);
+                hideLoading();
+                showError('Failed to load leads. Please refresh the page.');
+            }
+        }
 
         // Setup event listeners
         function setupEventListeners() {
@@ -828,10 +830,10 @@
                     </div>
                     
                     <div class="contact-info" id="contact-${lead.id}">
-                        <div class="contact-detail"><strong>Name:</strong> ${lead.purchased ? 'Sarah Johnson' : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Email:</strong> ${lead.purchased ? 'sarah.johnson@email.com' : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Phone:</strong> ${lead.purchased ? '(555) 123-4567' : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Full Address:</strong> ${lead.purchased ? '123 Oak Street, Charlotte, NC 28202' : 'Available after purchase'}</div>
+                        <div class="contact-detail"><strong>Name:</strong> ${lead.purchased ? `${lead.firstName} ${lead.lastName}` : 'Available after purchase'}</div>
+                        <div class="contact-detail"><strong>Email:</strong> ${lead.purchased ? lead.email : 'Available after purchase'}</div>
+                        <div class="contact-detail"><strong>Phone:</strong> ${lead.purchased ? lead.phone : 'Available after purchase'}</div>
+                        <div class="contact-detail"><strong>Full Address:</strong> ${lead.purchased ? lead.address : 'Available after purchase'}</div>
                     </div>
                 </div>
             `;
@@ -840,25 +842,46 @@
         }
 
         // Handle lead purchase
-        function handlePurchase(leadId) {
+        async function handlePurchase(leadId) {
             if (confirm('Purchase this lead for the listed price?')) {
-                // Show loading
                 const btn = event.target;
+                const originalText = btn.textContent;
+                
+                // Show loading
                 btn.disabled = true;
                 btn.textContent = 'Processing...';
                 
-                // Simulate payment processing
-                setTimeout(() => {
-                    // Update lead status
-                    const lead = currentLeads.find(l => l.id === leadId);
+                try {
+                    // Update lead in database
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?id=eq.${leadId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json',
+                            'Prefer': 'return=minimal'
+                        },
+                        body: JSON.stringify({
+                            purchased: true,
+                            purchased_by: 'Premium Estate Sales' // In production, use actual company name
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to update purchase status');
+                    }
+
+                    // Update local data
+                    const lead = currentLeads.find(l => l.id == leadId);
                     if (lead) {
                         lead.purchased = true;
-                    }
-                    
-                    // Show contact info
-                    const contactInfo = document.getElementById(`contact-${leadId}`);
-                    if (contactInfo) {
-                        contactInfo.classList.add('show');
+                        lead.purchasedBy = 'Premium Estate Sales';
+                        
+                        // Reveal contact info
+                        const contactInfo = document.getElementById(`contact-${leadId}`);
+                        if (contactInfo) {
+                            contactInfo.classList.add('show');
+                        }
                     }
                     
                     // Update button
@@ -869,8 +892,35 @@
                     updateStats();
                     
                     alert('Lead purchased successfully! Contact information is now visible.');
-                }, 1500);
+                    
+                } catch (error) {
+                    console.error('Purchase error:', error);
+                    alert('Failed to purchase lead. Please try again.');
+                    
+                    // Reset button
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
             }
+        }
+
+        // Show error message
+        function showError(message) {
+            const leadsGrid = document.getElementById('leadsGrid');
+            leadsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #ef4444;">
+                    <h3>Error Loading Leads</h3>
+                    <p>${message}</p>
+                    <button onclick="loadLeadsFromDatabase()" style="margin-top: 20px; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                        Retry
+                    </button>
+                </div>
+            `;
+        }
+
+        // Refresh leads (for manual refresh)
+        function refreshLeads() {
+            loadLeadsFromDatabase();
         }
 
         // Helper functions
