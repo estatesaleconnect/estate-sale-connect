@@ -812,6 +812,8 @@
         let currentPage = 1;
         const leadsPerPage = 12;
         let hasActiveSubscription = false;
+        let SUPABASE_URL = '';
+        let SUPABASE_ANON_KEY = '';
         
         // Company info (in production, get from authentication)
         const currentCompany = {
@@ -819,16 +821,47 @@
             email: 'premium@estatesales.com'
         };
 
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ftvkkpazzrrlxysocutp.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJybHh5c29jdXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5OTkyNTYsImV4cCI6MjA2OTU3NTI1Nn0.sLO5r-9Ds8cB8KFs2ILgT-obn0wtzTT6Uq6iybiChz4';
-
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
-            checkSubscriptionStatus();
-            loadLeadsFromDatabase();
-            setupEventListeners();
+            initializePortal();
         });
+
+        // Initialize portal with secure config loading
+        async function initializePortal() {
+            try {
+                // Load secure configuration first
+                await loadSecureConfig();
+                
+                // Then proceed with normal initialization
+                checkSubscriptionStatus();
+                loadLeadsFromDatabase();
+                setupEventListeners();
+            } catch (error) {
+                console.error('Failed to initialize portal:', error);
+                showError('Failed to initialize portal. Please refresh the page.');
+            }
+        }
+
+        // Load configuration securely from environment variables
+        async function loadSecureConfig() {
+            try {
+                const response = await fetch('/.netlify/functions/get-config');
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load configuration: ${response.status}`);
+                }
+                
+                const config = await response.json();
+                SUPABASE_URL = config.supabaseUrl;
+                SUPABASE_ANON_KEY = config.supabaseAnonKey;
+                
+                console.log('✅ Configuration loaded securely');
+                
+            } catch (error) {
+                console.error('❌ Failed to load secure configuration:', error);
+                throw error;
+            }
+        }
 
         // Check subscription status
         async function checkSubscriptionStatus() {
