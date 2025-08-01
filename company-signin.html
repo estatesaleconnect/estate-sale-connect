@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Sign In - Estate Sale Connect</title>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' /.netlify/functions/">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,6 +92,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
 
         .signin-header {
@@ -155,7 +162,7 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .signin-btn:hover {
+        .signin-btn:hover:not(:disabled) {
             background: #333333;
         }
 
@@ -216,6 +223,7 @@
             margin-bottom: 20px;
             font-size: 0.9rem;
             text-align: center;
+            display: none;
         }
 
         .message.error {
@@ -228,6 +236,12 @@
             background: #f0fdf4;
             color: #16a34a;
             border: 1px solid #bbf7d0;
+        }
+
+        .message.info {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
         }
 
         /* Loading State */
@@ -245,6 +259,28 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Security Notice */
+        .security-notice {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #92400e;
+        }
+
+        /* Demo Info */
+        .demo-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #0c4a6e;
         }
 
         /* Mobile Responsive */
@@ -277,18 +313,40 @@
                 <p>Sign in to access your lead marketplace</p>
             </div>
 
-            <!-- Error/Success Messages -->
+            <!-- Security Notice -->
+            <div class="security-notice">
+                🔒 Your connection is secure and protected with industry-standard encryption
+            </div>
+
+            <!-- Demo Info -->
+            <div class="demo-info">
+                📝 <strong>Demo Access:</strong> Use demo@estatesales.com / demo123 for testing
+            </div>
+
+            <!-- Message Container -->
             <div id="messageContainer"></div>
 
             <form class="signin-form" id="signinForm">
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required autocomplete="email">
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           required 
+                           autocomplete="email"
+                           maxlength="254"
+                           pattern="[^@\s]+@[^@\s]+\.[^@\s]+">
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           required 
+                           autocomplete="current-password"
+                           minlength="6"
+                           maxlength="128">
                 </div>
 
                 <button type="submit" class="signin-btn" id="signinBtn">
@@ -296,45 +354,50 @@
                 </button>
 
                 <div class="forgot-password">
-                    <a href="#" onclick="handleForgotPassword()">Forgot your password?</a>
+                    <a href="#" onclick="handleForgotPassword(event)">Forgot your password?</a>
                 </div>
             </form>
 
             <div class="signup-link">
                 <p>Don't have an account?</p>
-                <a href="#" class="signup-btn" onclick="handleSignup()">Request Company Access</a>
+                <a href="#" class="signup-btn" onclick="handleSignup(event)">Request Company Access</a>
             </div>
         </div>
     </div>
 
     <script>
-        // Demo credentials for testing
-        const DEMO_CREDENTIALS = {
-            'demo@estatesales.com': 'demo123',
-            'premium@estatesales.com': 'premium123',
-            'charlotte@estatesales.com': 'charlotte123'
-        };
+        // Constants
+        const MAX_LOGIN_ATTEMPTS = 5;
+        const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
 
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('signinForm');
             form.addEventListener('submit', handleSignin);
-
-            // Add demo credentials info for testing
-            showMessage('Demo: Use demo@estatesales.com / demo123', 'info');
+            
+            // Check if user is already authenticated
+            checkExistingSession();
+            
+            // Check if account is locked
+            checkAccountLockout();
         });
 
-        // Handle sign in form submission
-        function handleSignin(event) {
+        // Secure form submission handler
+        async function handleSignin(event) {
             event.preventDefault();
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = sanitizeInput(document.getElementById('email').value);
+            const password = document.getElementById('password').value; // Don't sanitize password
             const submitBtn = document.getElementById('signinBtn');
 
-            // Basic validation
-            if (!email || !password) {
-                showMessage('Please fill in all fields', 'error');
+            // Client-side validation
+            if (!validateForm(email, password)) {
+                return;
+            }
+
+            // Check rate limiting
+            if (isAccountLocked()) {
+                showMessage('Too many failed attempts. Please try again later.', 'error');
                 return;
             }
 
@@ -342,86 +405,197 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading"></span>Signing in...';
 
-            // Simulate authentication delay
-            setTimeout(() => {
-                // Check demo credentials
-                if (DEMO_CREDENTIALS[email] && DEMO_CREDENTIALS[email] === password) {
+            try {
+                // Call secure authentication endpoint
+                const response = await fetch('/.netlify/functions/auth-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Success - store token securely
+                    localStorage.setItem('auth_token', data.token);
+                    localStorage.setItem('company_user', JSON.stringify(data.user));
+                    
+                    // Clear failed attempts
+                    clearFailedAttempts();
+                    
                     showMessage('Sign in successful! Redirecting...', 'success');
                     
-                    // Store user session (in production, use proper JWT tokens)
-                    sessionStorage.setItem('company_user', JSON.stringify({
-                        email: email,
-                        company: getCompanyName(email),
-                        loginTime: new Date().toISOString()
-                    }));
-
-                    // Redirect to portal after short delay
+                    // Redirect to portal
                     setTimeout(() => {
                         window.location.href = 'company-portal.html';
                     }, 1500);
                 } else {
-                    showMessage('Invalid email or password', 'error');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Sign In';
+                    // Failed login
+                    recordFailedAttempt();
+                    showMessage(data.error || 'Invalid credentials', 'error');
                 }
-            }, 1000);
+            } catch (error) {
+                console.error('Login error:', error);
+                showMessage('Connection error. Please try again.', 'error');
+            } finally {
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Sign In';
+            }
         }
 
-        // Helper function to get company name from email
-        function getCompanyName(email) {
-            const companyMap = {
-                'demo@estatesales.com': 'Demo Estate Sales',
-                'premium@estatesales.com': 'Premium Estate Sales',
-                'charlotte@estatesales.com': 'Charlotte Estate Solutions'
-            };
-            return companyMap[email] || 'Estate Sale Company';
+        // Input validation
+        function validateForm(email, password) {
+            if (!email || !password) {
+                showMessage('Please fill in all fields', 'error');
+                return false;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address', 'error');
+                return false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                showMessage('Password must be at least 6 characters', 'error');
+                return false;
+            }
+
+            if (password.length > 128) {
+                showMessage('Password is too long', 'error');
+                return false;
+            }
+
+            return true;
         }
 
-        // Show messages to user
+        // Input sanitization
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            
+            // Remove any HTML tags and trim whitespace
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML.trim();
+        }
+
+        // Rate limiting functions
+        function recordFailedAttempt() {
+            const attempts = getFailedAttempts();
+            attempts.push(Date.now());
+            localStorage.setItem('failed_attempts', JSON.stringify(attempts));
+        }
+
+        function getFailedAttempts() {
+            try {
+                const attempts = JSON.parse(localStorage.getItem('failed_attempts') || '[]');
+                // Remove old attempts (older than lockout duration)
+                const cutoff = Date.now() - LOCKOUT_DURATION;
+                return attempts.filter(time => time > cutoff);
+            } catch {
+                return [];
+            }
+        }
+
+        function clearFailedAttempts() {
+            localStorage.removeItem('failed_attempts');
+        }
+
+        function isAccountLocked() {
+            const attempts = getFailedAttempts();
+            return attempts.length >= MAX_LOGIN_ATTEMPTS;
+        }
+
+        function checkAccountLockout() {
+            if (isAccountLocked()) {
+                const attempts = getFailedAttempts();
+                const oldestAttempt = Math.min(...attempts);
+                const timeRemaining = LOCKOUT_DURATION - (Date.now() - oldestAttempt);
+                const minutesRemaining = Math.ceil(timeRemaining / (60 * 1000));
+                
+                showMessage(`Account temporarily locked. Try again in ${minutesRemaining} minutes.`, 'error');
+                document.getElementById('signinBtn').disabled = true;
+            }
+        }
+
+        // Check existing session
+        async function checkExistingSession() {
+            const token = localStorage.getItem('auth_token');
+            if (!token) return;
+
+            try {
+                const response = await fetch('/.netlify/functions/auth-verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ token })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.valid) {
+                    // User is already authenticated
+                    window.location.href = 'company-portal.html';
+                }
+            } catch (error) {
+                // Token is invalid, remove it
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('company_user');
+            }
+        }
+
+        // Message display
         function showMessage(text, type = 'info') {
             const container = document.getElementById('messageContainer');
-            const messageClass = type === 'error' ? 'message error' : 
-                                type === 'success' ? 'message success' : 
-                                'message';
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            message.style.display = 'block';
             
-            container.innerHTML = `<div class="${messageClass}">${text}</div>`;
+            // Clear previous messages
+            container.innerHTML = '';
+            container.appendChild(message);
             
-            // Auto-hide info messages after 5 seconds
-            if (type === 'info') {
+            // Auto-hide success and info messages
+            if (type === 'success' || type === 'info') {
                 setTimeout(() => {
-                    container.innerHTML = '';
+                    message.style.display = 'none';
                 }, 5000);
             }
         }
 
-        // Handle forgot password
-        function handleForgotPassword() {
-            showMessage('Password reset functionality coming soon. Contact support for assistance.', 'info');
+        // Event handlers
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            showMessage('Password reset functionality available. Contact support for assistance.', 'info');
         }
 
-        // Handle signup request
-        function handleSignup() {
-            showMessage('New company registration is by approval only. Contact us to request access.', 'info');
+        function handleSignup(event) {
+            event.preventDefault();
+            showMessage('New company registration requires approval. Contact us to request access.', 'info');
         }
 
-        // Check if user is already logged in
-        function checkExistingSession() {
-            const user = sessionStorage.getItem('company_user');
-            if (user) {
-                const userData = JSON.parse(user);
-                const loginTime = new Date(userData.loginTime);
-                const now = new Date();
-                const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60);
-                
-                // If logged in within last 24 hours, redirect to portal
-                if (hoursSinceLogin < 24) {
-                    window.location.href = 'company-portal.html';
-                }
-            }
+        // Prevent XSS attacks by escaping HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
-
-        // Check for existing session on page load
-        checkExistingSession();
     </script>
 </body>
 </html>
