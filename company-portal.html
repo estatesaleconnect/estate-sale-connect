@@ -623,9 +623,9 @@
         let currentPage = 1;
         const leadsPerPage = 12;
 
-        // Supabase configuration
+        // Supabase configuration - FIXED API KEY
         const SUPABASE_URL = 'https://ftvkkpazzrrlxysocutp.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJseHlzb2N1dHAiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTczNzUzMjMzMywiZXhwIjoyMDUzMTA4MzMzfQ.eV3MbGc1QiIUz1iNIsInR5cCI6IkpXVCJ9';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJybHh5c29jdXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5OTkyNTYsImV4cCI6MjA2OTU3NTI1Nn0.sLO5r-9Ds8cB8KFs2ILgT-obn0wtzTT6Uq6iybiChz4';
 
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
@@ -638,6 +638,8 @@
             try {
                 showLoading();
                 console.log('Loading leads from database...');
+                console.log('Using URL:', SUPABASE_URL);
+                console.log('API Key length:', SUPABASE_ANON_KEY.length);
                 
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?select=*&order=created_at.desc`, {
                     headers: {
@@ -647,12 +649,18 @@
                     }
                 });
 
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
                 }
 
                 const leads = await response.json();
-                console.log('Loaded leads:', leads);
+                console.log('✅ Successfully loaded leads:', leads.length);
+                console.log('Leads data:', leads);
                 
                 // Transform database leads to match portal format
                 currentLeads = leads.map(lead => ({
@@ -1017,6 +1025,7 @@
         // Make functions globally available
         window.handlePurchase = handlePurchase;
         window.goToPage = goToPage;
+        window.refreshLeads = refreshLeads;
     </script>
 </body>
 </html>
