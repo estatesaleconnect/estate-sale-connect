@@ -1,0 +1,21 @@
+{
+  "name": "estate-sale-connect-functions",
+  "version": "1.0.0",
+  "description": "Netlify functions for Estate Sale Connect payment processing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "stripe": "^14.15.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "netlify",
+    "functions",
+    "stripe",
+    "payments"
+  ],
+  "author": "Estate Sale Connect",
+  "license": "ISC"
+}
