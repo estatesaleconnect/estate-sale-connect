@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Estate Sale Connect</title>
+    <meta name="description" content="Get in touch with Estate Sale Connect. Support for families and estate sale companies.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(30, 64, 175, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1e40af;
+            letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px rgba(30, 64, 175, 0.1);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            color: #1e40af;
+            background: #f1f5f9;
+        }
+
+        .nav-links a.active {
+            color: #1e40af;
+            background: #e0f2fe;
+        }
+
+        .company-login-btn {
+            background: #1a1a1a !important;
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            border: 1px solid #1a1a1a;
+        }
+
+        .company-login-btn:hover {
+            background: white !important;
+            color: #1a1a1a !important;
+            border-color: #1a1a1a;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0 80px;
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Contact Header */
+        .contact-header {
+            background: white;
+            padding: 80px 0;
+            text-align: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .contact-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .contact-header p {
+            font-size: 1.25rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Contact Sections */
+        .contact-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.1);
+            text-align: center;
+            border: 1px solid rgba(30, 64, 175, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(30, 64, 175, 0.15);
+        }
+
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+        }
+
+        .contact-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #1e40af;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .contact-card p {
+            color: #4b5563;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        .contact-btn {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 18px 36px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
+            color: white;
+        }
+
+        /* General Contact Section */
+        .general-contact {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.1);
+            text-align: center;
+            border: 1px solid rgba(30, 64, 175, 0.1);
+        }
+
+        .general-contact h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #1e40af;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .general-contact p {
+            color: #4b5563;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .email-display {
+            background: #f8fafc;
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 2px solid #e0f2fe;
+            margin: 30px auto;
+            max-width: 400px;
+        }
+
+        .email-display a {
+            color: #1e40af;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .email-display a:hover {
+            text-decoration: underline;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: #f8fafc;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+
+        .faq-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #1e40af;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .faq-item {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .faq-item h4 {
+            color: #1f2937;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .faq-item p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            color: #3b82f6;
+            margin-bottom: 15px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .contact-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .contact-sections {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-card,
+            .general-contact {
+                padding: 40px 30px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">ESTATE SALE CONNECT</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#how-it-works">How It Works</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="company-signin.html" class="company-login-btn">Company Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Contact Header -->
+            <div class="contact-header">
+                <h1>Get in Touch</h1>
+                <p>We're here to help families and estate sale companies connect. Reach out anytime with questions or support needs.</p>
+            </div>
+
+            <!-- Contact Sections -->
+            <div class="contact-sections">
+                <!-- For Families -->
+                <div class="contact-card">
+                    <div class="contact-icon">👨‍👩‍👧‍👦</div>
+                    <h2>For Families</h2>
+                    <p>Need help connecting with estate sale professionals? Have questions about the process or need support with your submission? We're here to guide you through every step.</p>
+                    <a href="mailto:info@estatesaleconnect.com?subject=Family%20Support%20Request&body=Hi,%20I%20need%20help%20with..." class="contact-btn">Get Family Support</a>
+                </div>
+
+                <!-- For Companies -->
+                <div class="contact-card">
+                    <div class="contact-icon">🏢</div>
+                    <h2>For Estate Sale Companies</h2>
+                    <p>Want to join our network? Need help with your account, billing, or have technical questions? Our team is ready to help you succeed on our platform.</p>
+                    <a href="mailto:info@estatesaleconnect.com?subject=Company%20Support%20Request&body=Hi,%20I%20need%20help%20with..." class="contact-btn">Get Company Support</a>
+                </div>
+            </div>
+
+            <!-- General Contact -->
+            <div class="general-contact">
+                <h2>General Inquiries</h2>
+                <p>For all other questions, partnership opportunities, or general feedback about Estate Sale Connect, we'd love to hear from you.</p>
+                
+                <div class="email-display">
+                    <a href="mailto:info@estatesaleconnect.com">info@estatesaleconnect.com</a>
+                </div>
+
+                <p style="color: #6b7280; font-size: 0.95rem; margin-top: 20px;">
+                    We typically respond within 24 hours during business days.
+                </p>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h3>Frequently Asked Questions</h3>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>How does Estate Sale Connect work?</h4>
+                        <p>Families submit their estate sale needs through our form, and qualified estate sale companies in their area can contact them directly to provide quotes and services.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Is this service free for families?</h4>
+                        <p>Yes! Our service is completely free for families. Estate sale companies pay to access leads, which allows us to provide this valuable matching service at no cost to families.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How do I become a partner company?</h4>
+                        <p>Estate sale companies can request access by contacting us. We verify credentials and insurance before granting access to our lead marketplace.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What areas do you serve?</h4>
+                        <p>We connect families and estate sale companies nationwide. Our network is growing daily to serve more communities across the United States.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Estate Sale Connect</h3>
+                    <p>Connecting families with trusted estate sale professionals nationwide.</p>
+                    <div style="margin-top: 15px;">
+                        <strong>Contact Us:</strong><br>
+                        <a href="mailto:info@estatesaleconnect.com" style="color: #3b82f6; text-decoration: none;">info@estatesaleconnect.com</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>For Families</h3>
+                    <a href="index.html#lead-form">Get Free Quotes</a>
+                    <a href="index.html#how-it-works">How It Works</a>
+                    <a href="mailto:info@estatesaleconnect.com">Contact Support</a>
+                </div>
+                <div class="footer-section">
+                    <h3>For Companies</h3>
+                    <a href="company-signin.html">Company Login</a>
+                    <a href="mailto:info@estatesaleconnect.com">Get Access</a>
+                    <a href="mailto:info@estatesaleconnect.com">Support</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #374151;">
+                <p>&copy; 2024 Estate Sale Connect. All rights reserved. | <a href="mailto:info@estatesaleconnect.com" style="color: #3b82f6;">Contact Us</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
