@@ -1,21 +1,33 @@
 {
   "name": "estate-sale-connect-functions",
   "version": "1.0.0",
-  "description": "Netlify functions for Estate Sale Connect payment processing",
+  "description": "Netlify functions for Estate Sale Connect with secure authentication",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "netlify dev",
+    "build": "netlify build"
   },
   "dependencies": {
-    "stripe": "^14.15.0"
+    "stripe": "^14.15.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcryptjs": "^2.4.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
   "keywords": [
     "netlify",
     "functions",
     "stripe",
-    "payments"
+    "payments",
+    "authentication",
+    "jwt",
+    "security"
   ],
   "author": "Estate Sale Connect",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
