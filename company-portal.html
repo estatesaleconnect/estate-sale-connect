@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
     <style>
         * {
             margin: 0;
@@ -85,6 +88,24 @@
             border: 1px solid #e5e7eb;
         }
 
+        .subscription-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .status-active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
         .logout-btn {
             background: #ef4444;
             color: white;
@@ -99,6 +120,48 @@
         .logout-btn:hover {
             background: #dc2626;
             color: white;
+        }
+
+        /* Subscription Banner */
+        .subscription-banner {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .subscription-banner.show {
+            display: block;
+        }
+
+        .subscription-banner h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .subscription-banner p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .subscribe-btn {
+            background: white;
+            color: #f59e0b;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         /* Main Content */
@@ -261,6 +324,21 @@
             border-color: #3b82f6;
         }
 
+        .lead-card.exclusive-available {
+            border-color: #fbbf24;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .exclusive-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            margin: -16px -20px 20px -20px;
+        }
+
         .lead-photos {
             height: 200px;
             background: #f1f5f9;
@@ -391,8 +469,13 @@
             color: #059669;
         }
 
-        .purchase-btn {
-            background: #3b82f6;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        .purchase-btn, .exclusive-btn {
             color: white;
             padding: 10px 20px;
             border: none;
@@ -400,10 +483,24 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .purchase-btn {
+            background: #3b82f6;
         }
 
         .purchase-btn:hover {
             background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .exclusive-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        .exclusive-btn:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             transform: translateY(-1px);
         }
 
@@ -484,6 +581,10 @@
             .nav-links {
                 display: none;
             }
+
+            .button-group {
+                flex-direction: column;
+            }
         }
 
         /* Loading State */
@@ -522,6 +623,7 @@
                 <li>
                     <div class="user-info">
                         <span>👤 Premium Estate Sales</span>
+                        <span class="subscription-status status-inactive" id="subscriptionStatus">No Subscription</span>
                     </div>
                 </li>
                 <li><a href="#" class="logout-btn">Logout</a></li>
@@ -532,6 +634,13 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
+            <!-- Subscription Banner -->
+            <div class="subscription-banner" id="subscriptionBanner">
+                <h3>🚀 Unlock Full Access to Estate Sale Leads</h3>
+                <p>Subscribe for $24.99/month to access all leads and contact information immediately</p>
+                <button class="subscribe-btn" onclick="handleSubscription()">Start Subscription</button>
+            </div>
+
             <!-- Portal Header -->
             <div class="portal-header">
                 <h1>Lead Marketplace</h1>
@@ -566,15 +675,15 @@
             <!-- Stats Bar -->
             <div class="stats-bar">
                 <div class="stat-card">
-                    <div class="stat-number" id="totalLeads">24</div>
+                    <div class="stat-number" id="totalLeads">0</div>
                     <div class="stat-label">Available Leads</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="newToday">5</div>
+                    <div class="stat-number" id="newToday">0</div>
                     <div class="stat-label">New Today</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="myPurchased">12</div>
+                    <div class="stat-number" id="myPurchased">0</div>
                     <div class="stat-label">My Purchased Leads</div>
                 </div>
                 <div class="stat-card">
@@ -622,24 +731,53 @@
         let filteredLeads = [];
         let currentPage = 1;
         const leadsPerPage = 12;
+        let hasActiveSubscription = false;
+        
+        // Company info (in production, get from authentication)
+        const currentCompany = {
+            name: 'Premium Estate Sales',
+            email: 'premium@estatesales.com'
+        };
 
-        // Supabase configuration - FIXED API KEY
+        // Supabase configuration
         const SUPABASE_URL = 'https://ftvkkpazzrrlxysocutp.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJybHh5c29jdXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5OTkyNTYsImV4cCI6MjA2OTU3NTI1Nn0.sLO5r-9Ds8cB8KFs2ILgT-obn0wtzTT6Uq6iybiChz4';
 
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
+            checkSubscriptionStatus();
             loadLeadsFromDatabase();
             setupEventListeners();
         });
+
+        // Check subscription status
+        async function checkSubscriptionStatus() {
+            // In production, check actual subscription status from database
+            // For demo, assume no subscription initially
+            hasActiveSubscription = false;
+            updateSubscriptionUI();
+        }
+
+        function updateSubscriptionUI() {
+            const banner = document.getElementById('subscriptionBanner');
+            const status = document.getElementById('subscriptionStatus');
+            
+            if (hasActiveSubscription) {
+                banner.classList.remove('show');
+                status.textContent = 'Active Subscription';
+                status.className = 'subscription-status status-active';
+            } else {
+                banner.classList.add('show');
+                status.textContent = 'No Subscription';
+                status.className = 'subscription-status status-inactive';
+            }
+        }
 
         // Load leads from Supabase
         async function loadLeadsFromDatabase() {
             try {
                 showLoading();
                 console.log('Loading leads from database...');
-                console.log('Using URL:', SUPABASE_URL);
-                console.log('API Key length:', SUPABASE_ANON_KEY.length);
                 
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?select=*&order=created_at.desc`, {
                     headers: {
@@ -649,27 +787,21 @@
                     }
                 });
 
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-
                 if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error('Error response:', errorText);
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
                 const leads = await response.json();
                 console.log('✅ Successfully loaded leads:', leads.length);
-                console.log('Leads data:', leads);
                 
                 // Transform database leads to match portal format
                 currentLeads = leads.map(lead => ({
                     id: lead.id,
-                    firstName: lead.purchased ? lead.first_name : 'Available after purchase',
-                    lastName: lead.purchased ? lead.last_name : '',
-                    email: lead.purchased ? lead.email : 'Available after purchase',
-                    phone: lead.purchased ? lead.phone : 'Available after purchase',
-                    address: lead.purchased ? lead.address : 'Available after purchase',
+                    firstName: lead.first_name,
+                    lastName: lead.last_name,
+                    email: lead.email,
+                    phone: lead.phone,
+                    address: lead.address,
                     zipCode: lead.zip_code,
                     propertyType: lead.property_type,
                     timeline: lead.timeline,
@@ -679,7 +811,15 @@
                     price: lead.price || 39.99,
                     purchased: lead.purchased || false,
                     purchasedBy: lead.purchased_by,
-                    // For filtering - extract coordinates from zip if needed
+                    exclusivePurchasedBy: lead.exclusive_purchased_by,
+                    exclusivePurchaseDate: lead.exclusive_purchase_date,
+                    // Calculate if in exclusive window (24 hours)
+                    isInExclusiveWindow: function() {
+                        const submittedTime = new Date(this.dateSubmitted);
+                        const now = new Date();
+                        const hoursSinceSubmission = (now - submittedTime) / (1000 * 60 * 60);
+                        return hoursSinceSubmission < 24 && !this.exclusivePurchasedBy;
+                    },
                     coordinates: { lat: 0, lng: 0 }
                 }));
 
@@ -711,7 +851,6 @@
 
             showLoading();
             
-            // Simulate API call delay
             setTimeout(() => {
                 filterLeads(zipCode, radius, timeline);
                 hideLoading();
@@ -723,18 +862,15 @@
         // Filter leads based on search criteria
         function filterLeads(zipCode, radius, timeline) {
             filteredLeads = currentLeads.filter(lead => {
-                // Timeline filter
                 if (timeline && lead.timeline !== timeline) {
                     return false;
                 }
 
-                // Zip code and radius filter (simplified - in production you'd use proper geo calculations)
                 if (zipCode) {
                     const leadZip = parseInt(lead.zipCode);
                     const searchZip = parseInt(zipCode);
                     const zipDiff = Math.abs(leadZip - searchZip);
                     
-                    // Simple approximation - in production use proper geolocation API
                     if (zipDiff > (radius / 10)) {
                         return false;
                     }
@@ -743,7 +879,7 @@
                 return true;
             });
 
-            currentPage = 1; // Reset to first page
+            currentPage = 1;
         }
 
         // Display leads in the grid
@@ -777,7 +913,9 @@
         // Create a lead card element
         function createLeadCard(lead) {
             const card = document.createElement('div');
-            card.className = 'lead-card';
+            const isExclusiveAvailable = lead.isInExclusiveWindow();
+            
+            card.className = `lead-card ${isExclusiveAvailable ? 'exclusive-available' : ''}`;
             
             const timelineClass = `timeline-${lead.timeline}`;
             const timelineText = getTimelineText(lead.timeline);
@@ -794,7 +932,49 @@
                     <div class="no-photos">📷</div>
                 </div>`;
 
+            // Determine what contact info to show
+            const canSeeContactInfo = hasActiveSubscription || lead.purchased || lead.exclusivePurchasedBy;
+            const contactDisplay = canSeeContactInfo ? 
+                `${lead.firstName} ${lead.lastName}` : 
+                'Subscribe to view contact info';
+
+            // Determine buttons to show
+            let buttonsHtml = '';
+            if (lead.exclusivePurchasedBy) {
+                buttonsHtml = `
+                    <div class="button-group">
+                        <button class="purchased-btn" disabled>Exclusively Purchased</button>
+                    </div>
+                `;
+            } else if (isExclusiveAvailable) {
+                buttonsHtml = `
+                    <div class="button-group">
+                        <button class="exclusive-btn" onclick="handleExclusivePurchase('${lead.id}')">
+                            Buy Exclusive ($24.99)
+                        </button>
+                        <small style="color: #6b7280;">24-hour exclusive access</small>
+                    </div>
+                `;
+            } else if (hasActiveSubscription) {
+                buttonsHtml = `
+                    <div class="button-group">
+                        <button class="purchase-btn" onclick="handleContactLead('${lead.id}')">
+                            Contact Lead
+                        </button>
+                    </div>
+                `;
+            } else {
+                buttonsHtml = `
+                    <div class="button-group">
+                        <button class="subscribe-btn" onclick="handleSubscription()">
+                            Subscribe to Access
+                        </button>
+                    </div>
+                `;
+            }
+
             card.innerHTML = `
+                ${isExclusiveAvailable ? '<div class="exclusive-badge">⭐ Exclusive Purchase Available</div>' : ''}
                 ${photosHtml}
                 <div class="lead-info">
                     <div class="lead-header">
@@ -808,7 +988,7 @@
                     <div class="lead-details">
                         <div class="detail-item">
                             <span class="detail-label">Contact:</span><br>
-                            ${lead.purchased ? `${lead.firstName} ${lead.lastName}` : 'Available after purchase'}
+                            ${contactDisplay}
                         </div>
                         <div class="detail-item">
                             <span class="detail-label">Property:</span><br>
@@ -829,19 +1009,17 @@
                     </div>
                     
                     <div class="lead-footer">
-                        <div class="lead-price">$${lead.price}</div>
-                        <button class="purchase-btn ${lead.purchased ? 'purchased-btn' : ''}" 
-                                onclick="handlePurchase('${lead.id}')"
-                                ${lead.purchased ? 'disabled' : ''}>
-                            ${lead.purchased ? 'Purchased' : 'Purchase Lead'}
-                        </button>
+                        <div class="lead-price">
+                            ${isExclusiveAvailable ? '$24.99' : hasActiveSubscription ? 'Included' : '$24.99/mo'}
+                        </div>
+                        ${buttonsHtml}
                     </div>
                     
-                    <div class="contact-info" id="contact-${lead.id}">
-                        <div class="contact-detail"><strong>Name:</strong> ${lead.purchased ? `${lead.firstName} ${lead.lastName}` : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Email:</strong> ${lead.purchased ? lead.email : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Phone:</strong> ${lead.purchased ? lead.phone : 'Available after purchase'}</div>
-                        <div class="contact-detail"><strong>Full Address:</strong> ${lead.purchased ? lead.address : 'Available after purchase'}</div>
+                    <div class="contact-info ${canSeeContactInfo ? 'show' : ''}" id="contact-${lead.id}">
+                        <div class="contact-detail"><strong>Name:</strong> ${canSeeContactInfo ? `${lead.firstName} ${lead.lastName}` : 'Subscribe to view'}</div>
+                        <div class="contact-detail"><strong>Email:</strong> ${canSeeContactInfo ? lead.email : 'Subscribe to view'}</div>
+                        <div class="contact-detail"><strong>Phone:</strong> ${canSeeContactInfo ? lead.phone : 'Subscribe to view'}</div>
+                        <div class="contact-detail"><strong>Full Address:</strong> ${canSeeContactInfo ? lead.address : 'Subscribe to view'}</div>
                     </div>
                 </div>
             `;
@@ -849,66 +1027,76 @@
             return card;
         }
 
-        // Handle lead purchase
-        async function handlePurchase(leadId) {
-            if (confirm('Purchase this lead for the listed price?')) {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                
-                // Show loading
-                btn.disabled = true;
-                btn.textContent = 'Processing...';
-                
-                try {
-                    // Update lead in database
-                    const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?id=eq.${leadId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                            'Content-Type': 'application/json',
-                            'Prefer': 'return=minimal'
-                        },
-                        body: JSON.stringify({
-                            purchased: true,
-                            purchased_by: 'Premium Estate Sales' // In production, use actual company name
-                        })
-                    });
+        // Handle subscription purchase
+        async function handleSubscription() {
+            try {
+                const response = await fetch('/.netlify/functions/create-checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'subscription',
+                        companyEmail: currentCompany.email,
+                        companyName: currentCompany.name
+                    })
+                });
 
-                    if (!response.ok) {
-                        throw new Error('Failed to update purchase status');
-                    }
+                const data = await response.json();
 
-                    // Update local data
-                    const lead = currentLeads.find(l => l.id == leadId);
-                    if (lead) {
-                        lead.purchased = true;
-                        lead.purchasedBy = 'Premium Estate Sales';
-                        
-                        // Reveal contact info
-                        const contactInfo = document.getElementById(`contact-${leadId}`);
-                        if (contactInfo) {
-                            contactInfo.classList.add('show');
-                        }
-                    }
-                    
-                    // Update button
-                    btn.textContent = 'Purchased';
-                    btn.className = 'purchase-btn purchased-btn';
-                    
-                    // Update stats
-                    updateStats();
-                    
-                    alert('Lead purchased successfully! Contact information is now visible.');
-                    
-                } catch (error) {
-                    console.error('Purchase error:', error);
-                    alert('Failed to purchase lead. Please try again.');
-                    
-                    // Reset button
-                    btn.disabled = false;
-                    btn.textContent = originalText;
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Failed to create checkout session');
                 }
+            } catch (error) {
+                console.error('Subscription error:', error);
+                alert('Failed to start subscription process. Please try again.');
+            }
+        }
+
+        // Handle exclusive lead purchase
+        async function handleExclusivePurchase(leadId) {
+            if (!confirm('Purchase exclusive 24-hour access to this lead for $24.99?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/create-checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        type: 'exclusive',
+                        leadId: leadId,
+                        companyEmail: currentCompany.email,
+                        companyName: currentCompany.name
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    throw new Error('Failed to create checkout session');
+                }
+            } catch (error) {
+                console.error('Exclusive purchase error:', error);
+                alert('Failed to start exclusive purchase. Please try again.');
+            }
+        }
+
+        // Handle contact lead (for subscribers)
+        function handleContactLead(leadId) {
+            const lead = currentLeads.find(l => l.id == leadId);
+            if (lead) {
+                const contactInfo = document.getElementById(`contact-${leadId}`);
+                if (contactInfo) {
+                    contactInfo.classList.add('show');
+                }
+                alert(`You can now contact ${lead.firstName} ${lead.lastName} directly using the information shown below.`);
             }
         }
 
@@ -926,7 +1114,7 @@
             `;
         }
 
-        // Refresh leads (for manual refresh)
+        // Refresh leads
         function refreshLeads() {
             loadLeadsFromDatabase();
         }
@@ -952,8 +1140,8 @@
         }
 
         function updateStats() {
-            const totalAvailable = filteredLeads.filter(l => !l.purchased).length;
-            const purchased = currentLeads.filter(l => l.purchased).length;
+            const totalAvailable = filteredLeads.filter(l => !l.exclusivePurchasedBy).length;
+            const purchased = currentLeads.filter(l => l.purchased || l.exclusivePurchasedBy).length;
             const newToday = currentLeads.filter(l => 
                 new Date(l.dateSubmitted).toDateString() === new Date().toDateString()
             ).length;
@@ -978,14 +1166,12 @@
 
             let paginationHtml = '';
             
-            // Previous button
             paginationHtml += `
                 <button onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
                     Previous
                 </button>
             `;
             
-            // Page numbers
             for (let i = 1; i <= totalPages; i++) {
                 paginationHtml += `
                     <button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">
@@ -994,7 +1180,6 @@
                 `;
             }
             
-            // Next button
             paginationHtml += `
                 <button onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
                     Next
@@ -1023,7 +1208,9 @@
         }
 
         // Make functions globally available
-        window.handlePurchase = handlePurchase;
+        window.handleSubscription = handleSubscription;
+        window.handleExclusivePurchase = handleExclusivePurchase;
+        window.handleContactLead = handleContactLead;
         window.goToPage = goToPage;
         window.refreshLeads = refreshLeads;
     </script>
