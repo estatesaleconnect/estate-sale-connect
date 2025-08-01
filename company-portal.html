@@ -305,65 +305,144 @@
 
         .leads-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
         }
 
         .lead-card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             overflow: hidden;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 1px solid #e5e7eb;
+            position: relative;
         }
 
         .lead-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
             border-color: #3b82f6;
         }
 
         .lead-card.exclusive-available {
-            border-color: #fbbf24;
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: #f59e0b;
+            box-shadow: 0 2px 12px rgba(245, 158, 11, 0.15);
         }
 
         .exclusive-badge {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
-            padding: 8px 16px;
-            font-size: 0.9rem;
+            padding: 8px 12px;
+            font-size: 0.8rem;
             font-weight: 600;
             text-align: center;
-            margin: -16px -20px 20px -20px;
+            z-index: 10;
+            border-radius: 12px 12px 0 0;
         }
 
         .lead-photos {
-            height: 200px;
-            background: #f1f5f9;
-            display: flex;
+            height: 140px;
+            background: #f8fafc;
             position: relative;
             overflow: hidden;
         }
 
-        .lead-photo {
-            flex: 1;
+        .photo-gallery {
+            display: flex;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+
+        .photo-slide {
+            min-width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
             position: relative;
         }
 
+        .photo-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .photo-nav:hover {
+            background: rgba(0,0,0,0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .photo-nav.prev {
+            left: 8px;
+        }
+
+        .photo-nav.next {
+            right: 8px;
+        }
+
+        .photo-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .photo-nav:disabled:hover {
+            transform: translateY(-50%) scale(1);
+            background: rgba(0,0,0,0.6);
+        }
+
+        .photo-indicators {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 5;
+        }
+
+        .photo-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .photo-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
         .photo-count-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 8px;
+            right: 8px;
             background: rgba(0,0,0,0.7);
             color: white;
             padding: 4px 8px;
             border-radius: 12px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 500;
+            z-index: 5;
         }
 
         .no-photos {
@@ -371,40 +450,40 @@
             align-items: center;
             justify-content: center;
             color: #9ca3af;
-            font-size: 3rem;
+            font-size: 2rem;
+            height: 100%;
+            width: 100%;
         }
 
         .lead-info {
-            padding: 25px;
+            padding: 16px;
         }
 
         .lead-header {
-            display: flex;
-            justify-content: between;
-            align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .lead-title {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 600;
             color: #1f2937;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            line-height: 1.3;
         }
 
         .lead-location {
             color: #6b7280;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
         }
 
         .lead-timeline {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
             font-weight: 500;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .timeline-asap {
@@ -430,9 +509,9 @@
         .lead-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-            font-size: 0.9rem;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-size: 0.8rem;
         }
 
         .detail-item {
@@ -442,15 +521,16 @@
         .detail-label {
             font-weight: 500;
             color: #374151;
+            font-size: 0.75rem;
         }
 
         .lead-description {
             color: #4b5563;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            line-height: 1.5;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
             display: -webkit-box;
-            -webkit-line-clamp: 3;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -459,31 +539,31 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 20px;
+            padding-top: 12px;
             border-top: 1px solid #e5e7eb;
         }
 
         .lead-price {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 700;
             color: #059669;
         }
 
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             flex-direction: column;
         }
 
         .purchase-btn, .exclusive-btn {
             color: white;
-            padding: 10px 20px;
+            padding: 8px 12px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .purchase-btn {
@@ -516,10 +596,10 @@
 
         .contact-info {
             background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-size: 0.9rem;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.8rem;
             display: none;
         }
 
@@ -528,7 +608,7 @@
         }
 
         .contact-detail {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         /* Pagination */
@@ -920,23 +1000,14 @@
             const timelineClass = `timeline-${lead.timeline}`;
             const timelineText = getTimelineText(lead.timeline);
             
-            const photosHtml = lead.photos.length > 0 ? 
-                `<div class="lead-photos">
-                    ${lead.photos.slice(0, 2).map((photo, index) => 
-                        `<div class="lead-photo" style="background-image: url('${photo}')"></div>`
-                    ).join('')}
-                    ${lead.photos.length > 2 ? 
-                        `<div class="photo-count-badge">+${lead.photos.length - 2} more</div>` : ''}
-                </div>` :
-                `<div class="lead-photos">
-                    <div class="no-photos">📷</div>
-                </div>`;
+            // Create photo gallery HTML
+            const photosHtml = createPhotoGallery(lead.photos, lead.id);
 
             // Determine what contact info to show
             const canSeeContactInfo = hasActiveSubscription || lead.purchased || lead.exclusivePurchasedBy;
             const contactDisplay = canSeeContactInfo ? 
                 `${lead.firstName} ${lead.lastName}` : 
-                'Subscribe to view contact info';
+                'Subscribe to view';
 
             // Determine buttons to show
             let buttonsHtml = '';
@@ -952,7 +1023,7 @@
                         <button class="exclusive-btn" onclick="handleExclusivePurchase('${lead.id}')">
                             Buy Exclusive ($24.99)
                         </button>
-                        <small style="color: #6b7280;">24-hour exclusive access</small>
+                        <small style="color: #6b7280; font-size: 0.7rem;">24-hour exclusive access</small>
                     </div>
                 `;
             } else if (hasActiveSubscription) {
@@ -978,28 +1049,26 @@
                 ${photosHtml}
                 <div class="lead-info">
                     <div class="lead-header">
-                        <div>
-                            <div class="lead-title">${lead.propertyType.charAt(0).toUpperCase() + lead.propertyType.slice(1)} Estate Sale</div>
-                            <div class="lead-location">📍 ${lead.zipCode}</div>
-                            <div class="lead-timeline ${timelineClass}">${timelineText}</div>
-                        </div>
+                        <div class="lead-title">${lead.propertyType.charAt(0).toUpperCase() + lead.propertyType.slice(1)} Estate Sale</div>
+                        <div class="lead-location">📍 ${lead.zipCode}</div>
+                        <div class="lead-timeline ${timelineClass}">${timelineText}</div>
                     </div>
                     
                     <div class="lead-details">
                         <div class="detail-item">
-                            <span class="detail-label">Contact:</span><br>
+                            <div class="detail-label">Contact:</div>
                             ${contactDisplay}
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Property:</span><br>
+                            <div class="detail-label">Property:</div>
                             ${lead.propertyType.charAt(0).toUpperCase() + lead.propertyType.slice(1)}
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Photos:</span><br>
+                            <div class="detail-label">Photos:</div>
                             ${lead.photos.length} uploaded
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label">Submitted:</span><br>
+                            <div class="detail-label">Submitted:</div>
                             ${formatDate(lead.dateSubmitted)}
                         </div>
                     </div>
@@ -1019,12 +1088,98 @@
                         <div class="contact-detail"><strong>Name:</strong> ${canSeeContactInfo ? `${lead.firstName} ${lead.lastName}` : 'Subscribe to view'}</div>
                         <div class="contact-detail"><strong>Email:</strong> ${canSeeContactInfo ? lead.email : 'Subscribe to view'}</div>
                         <div class="contact-detail"><strong>Phone:</strong> ${canSeeContactInfo ? lead.phone : 'Subscribe to view'}</div>
-                        <div class="contact-detail"><strong>Full Address:</strong> ${canSeeContactInfo ? lead.address : 'Subscribe to view'}</div>
+                        <div class="contact-detail"><strong>Address:</strong> ${canSeeContactInfo ? lead.address : 'Subscribe to view'}</div>
                     </div>
                 </div>
             `;
 
             return card;
+        }
+
+        // Create photo gallery HTML
+        function createPhotoGallery(photos, leadId) {
+            if (photos.length === 0) {
+                return `
+                    <div class="lead-photos">
+                        <div class="no-photos">📷</div>
+                    </div>
+                `;
+            }
+
+            const galleryId = `gallery-${leadId}`;
+            
+            const slidesHtml = photos.map(photo => 
+                `<div class="photo-slide" style="background-image: url('${photo}')"></div>`
+            ).join('');
+
+            const indicatorsHtml = photos.length > 1 ? photos.map((_, index) => 
+                `<div class="photo-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide('${galleryId}', ${index})"></div>`
+            ).join('') : '';
+
+            const navButtons = photos.length > 1 ? `
+                <button class="photo-nav prev" onclick="previousPhoto('${galleryId}')" ${photos.length <= 1 ? 'disabled' : ''}>‹</button>
+                <button class="photo-nav next" onclick="nextPhoto('${galleryId}')" ${photos.length <= 1 ? 'disabled' : ''}>›</button>
+            ` : '';
+
+            return `
+                <div class="lead-photos">
+                    <div class="photo-gallery" id="${galleryId}" data-current="0" data-total="${photos.length}">
+                        ${slidesHtml}
+                    </div>
+                    ${navButtons}
+                    ${photos.length > 1 ? `<div class="photo-indicators">${indicatorsHtml}</div>` : ''}
+                    ${photos.length > 1 ? `<div class="photo-count-badge">${photos.length} photos</div>` : ''}
+                </div>
+            `;
+        }
+
+        // Photo gallery navigation functions
+        function nextPhoto(galleryId) {
+            const gallery = document.getElementById(galleryId);
+            if (!gallery) return;
+            
+            const current = parseInt(gallery.dataset.current);
+            const total = parseInt(gallery.dataset.total);
+            const next = (current + 1) % total;
+            
+            goToSlide(galleryId, next);
+        }
+
+        function previousPhoto(galleryId) {
+            const gallery = document.getElementById(galleryId);
+            if (!gallery) return;
+            
+            const current = parseInt(gallery.dataset.current);
+            const total = parseInt(gallery.dataset.total);
+            const prev = (current - 1 + total) % total;
+            
+            goToSlide(galleryId, prev);
+        }
+
+        function goToSlide(galleryId, slideIndex) {
+            const gallery = document.getElementById(galleryId);
+            if (!gallery) return;
+            
+            const total = parseInt(gallery.dataset.total);
+            if (slideIndex < 0 || slideIndex >= total) return;
+            
+            // Update gallery position
+            gallery.style.transform = `translateX(-${slideIndex * 100}%)`;
+            gallery.dataset.current = slideIndex;
+            
+            // Update indicators
+            const card = gallery.closest('.lead-card');
+            const indicators = card.querySelectorAll('.photo-dot');
+            indicators.forEach((dot, index) => {
+                dot.classList.toggle('active', index === slideIndex);
+            });
+            
+            // Update nav buttons
+            const prevBtn = card.querySelector('.photo-nav.prev');
+            const nextBtn = card.querySelector('.photo-nav.next');
+            
+            if (prevBtn) prevBtn.disabled = slideIndex === 0;
+            if (nextBtn) nextBtn.disabled = slideIndex === total - 1;
         }
 
         // Handle subscription purchase
@@ -1213,6 +1368,9 @@
         window.handleContactLead = handleContactLead;
         window.goToPage = goToPage;
         window.refreshLeads = refreshLeads;
+        window.nextPhoto = nextPhoto;
+        window.previousPhoto = previousPhoto;
+        window.goToSlide = goToSlide;
     </script>
 </body>
 </html>
