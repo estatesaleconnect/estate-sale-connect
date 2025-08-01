@@ -782,10 +782,8 @@
         let filteredLeads = [];
         let currentNoteLeadId = null;
         let currentUser = null;
-
-        // Supabase configuration
-        const SUPABASE_URL = 'https://ftvkkpazzrrlxysocutp.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0dmtrcGF6enJybHh5c29jdXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5OTkyNTYsImV4cCI6MjA2OTU3NTI1Nn0.sLO5r-9Ds8cB8KFs2ILgT-obn0wtzTT6Uq6iybiChz4';
+        let SUPABASE_URL = '';
+        let SUPABASE_ANON_KEY = '';
 
         // Check authentication before anything else
         function checkAuthentication() {
@@ -825,6 +823,27 @@
             }
         }
 
+        // Load configuration securely from environment variables
+        async function loadSecureConfig() {
+            try {
+                const response = await fetch('/.netlify/functions/get-config');
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load configuration: ${response.status}`);
+                }
+                
+                const config = await response.json();
+                SUPABASE_URL = config.supabaseUrl;
+                SUPABASE_ANON_KEY = config.supabaseAnonKey;
+                
+                console.log('✅ Configuration loaded securely');
+                
+            } catch (error) {
+                console.error('❌ Failed to load secure configuration:', error);
+                throw error;
+            }
+        }
+
         // Update UI with authenticated user info
         function updateUserInterface() {
             if (!currentUser) return;
@@ -844,17 +863,30 @@
 
         // Initialize dashboard (only if authenticated)
         document.addEventListener('DOMContentLoaded', function() {
-            // Check authentication first - will redirect if not authenticated
-            if (!checkAuthentication()) {
-                return; // Stop execution if not authenticated
-            }
-            
-            // Only proceed if user is authenticated
-            loadMyLeads();
-            setupEventListeners();
-            
-            console.log('Dashboard initialized for:', currentUser.company);
+            initializeDashboard();
         });
+
+        // Initialize dashboard with secure config loading
+        async function initializeDashboard() {
+            try {
+                // Check authentication first - will redirect if not authenticated
+                if (!checkAuthentication()) {
+                    return; // Stop execution if not authenticated
+                }
+                
+                // Load secure configuration
+                await loadSecureConfig();
+                
+                // Only proceed if user is authenticated and config loaded
+                loadMyLeads();
+                setupEventListeners();
+                
+                console.log('Dashboard initialized for:', currentUser.company);
+            } catch (error) {
+                console.error('Failed to initialize dashboard:', error);
+                showError('Failed to initialize dashboard. Please refresh the page.');
+            }
+        }
 
         // Setup event listeners
         function setupEventListeners() {
