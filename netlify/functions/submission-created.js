@@ -11,17 +11,12 @@ exports.handler = async (event, context) => {
     console.log('Raw event body:', event.body);
     
     // Parse the Netlify form submission
-    let formData;
-    
     console.log('Headers:', event.headers);
     console.log('Raw body:', event.body);
     
-    // Netlify sends form data as URL-encoded
-    const params = new URLSearchParams(event.body);
-    formData = {};
-    for (const [key, value] of params) {
-      formData[key] = value;
-    }
+    // Netlify sends webhook data as JSON
+    const webhookData = JSON.parse(event.body);
+    const formData = webhookData.payload.data;
     
     console.log('Parsed form data:', formData);
 
@@ -46,7 +41,8 @@ exports.handler = async (event, context) => {
       photo_urls: formData['photo-urls'] || formData.photo_urls || '',
       price: 39.99,
       purchased: false,
-      purchased_by: null
+      purchased_by: null,
+      created_at: new Date().toISOString()
     };
 
     console.log('Sending to Supabase:', leadData);
