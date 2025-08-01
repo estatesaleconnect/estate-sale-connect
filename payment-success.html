@@ -210,3 +210,149 @@
         }
     </style>
 </head>
+<body>
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">
+                ✅
+            </div>
+            
+            <h1 class="success-title">Payment Successful!</h1>
+            <p class="success-message">
+                Thank you for your payment. Your subscription is now active and you have full access to estate sale leads.
+            </p>
+
+            <div class="payment-details">
+                <h3>Payment Details</h3>
+                <div class="detail-row">
+                    <span class="detail-label">Payment Type:</span>
+                    <span class="detail-value" id="paymentType">Loading...</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Amount:</span>
+                    <span class="detail-value" id="paymentAmount">$24.99</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Date:</span>
+                    <span class="detail-value" id="paymentDate">Loading...</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Transaction ID:</span>
+                    <span class="detail-value" id="transactionId">Loading...</span>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3>What's Next?</h3>
+                <ul id="nextStepsList">
+                    <li>Return to the portal to browse available leads</li>
+                    <li>View and contact prospects immediately</li>
+                    <li>Download lead information and photos</li>
+                    <li>Access new leads as they become available</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="company-portal.html" class="btn btn-primary">
+                    🚀 Access Lead Portal
+                </a>
+                <a href="#" onclick="downloadReceipt()" class="btn btn-secondary">
+                    📄 Download Receipt
+                </a>
+            </div>
+
+            <div class="contact-support">
+                <p>
+                    Questions about your subscription? 
+                    <a href="mailto:support@estatesaleconnect.com">Contact Support</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            setPaymentDate();
+            if (sessionId) {
+                fetchPaymentDetails(sessionId);
+            } else {
+                showGenericSuccess();
+            }
+        });
+
+        function setPaymentDate() {
+            const now = new Date();
+            const dateString = now.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            document.getElementById('paymentDate').textContent = dateString;
+        }
+
+        async function fetchPaymentDetails(sessionId) {
+            try {
+                // In production, you'd call your backend to get session details
+                // For now, we'll simulate based on common patterns
+                
+                // Set transaction ID (truncated for display)
+                const shortSessionId = sessionId.substring(sessionId.length - 8);
+                document.getElementById('transactionId').textContent = `...${shortSessionId}`;
+                
+                // Determine payment type from URL or session storage
+                const paymentType = sessionStorage.getItem('payment_type') || 'subscription';
+                updatePaymentTypeDisplay(paymentType);
+                
+            } catch (error) {
+                console.error('Error fetching payment details:', error);
+                showGenericSuccess();
+            }
+        }
+
+        function updatePaymentTypeDisplay(type) {
+            const paymentTypeEl = document.getElementById('paymentType');
+            const nextStepsEl = document.getElementById('nextStepsList');
+            
+            if (type === 'subscription') {
+                paymentTypeEl.textContent = 'Monthly Subscription';
+                nextStepsEl.innerHTML = `
+                    <li>Browse all available estate sale leads</li>
+                    <li>Access contact information for all prospects</li>
+                    <li>Receive notifications for new leads in your area</li>
+                    <li>Download high-resolution photos and documents</li>
+                    <li>Your subscription will auto-renew monthly</li>
+                `;
+            } else if (type === 'exclusive') {
+                paymentTypeEl.textContent = 'Exclusive Lead Access';
+                document.getElementById('paymentAmount').textContent = '$24.99';
+                nextStepsEl.innerHTML = `
+                    <li>You have exclusive access to this lead for 24 hours</li>
+                    <li>Contact the prospect immediately using the provided information</li>
+                    <li>Download all photos and property details</li>
+                    <li>No other companies can access this lead during your exclusive window</li>
+                `;
+            }
+        }
+
+        function showGenericSuccess() {
+            document.getElementById('paymentType').textContent = 'Payment';
+            document.getElementById('transactionId').textContent = 'Completed Successfully';
+        }
+
+        function downloadReceipt() {
+            // In production, this would generate and download a PDF receipt
+            alert('Receipt download feature coming soon. You will receive an email receipt shortly.');
+        }
+
+        // Clear any temporary session data
+        sessionStorage.removeItem('payment_type');
+    </script>
+</body>
+</html>
