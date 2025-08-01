@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Sign In - Estate Sale Connect</title>
     
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' /.netlify/functions/">
+    <!-- Security Headers - FIXED CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.netlify.app https://*.netlify.com">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
     <!-- Google Fonts -->
@@ -283,6 +282,18 @@
             color: #0c4a6e;
         }
 
+        /* Debug Info */
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #374151;
+            font-family: monospace;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .signin-box {
@@ -323,6 +334,11 @@
                 📝 <strong>Demo Access:</strong> Use demo@estatesales.com / demo123 for testing
             </div>
 
+            <!-- Debug Info -->
+            <div class="debug-info" id="debugInfo">
+                🔧 <strong>Debug:</strong> <span id="debugText">Checking connection...</span>
+            </div>
+
             <!-- Message Container -->
             <div id="messageContainer"></div>
 
@@ -335,7 +351,7 @@
                            required 
                            autocomplete="email"
                            maxlength="254"
-                           pattern="[^@\s]+@[^@\s]+\.[^@\s]+">
+                           value="demo@estatesales.com">
                 </div>
 
                 <div class="form-group">
@@ -346,7 +362,8 @@
                            required 
                            autocomplete="current-password"
                            minlength="6"
-                           maxlength="128">
+                           maxlength="128"
+                           value="demo123">
                 </div>
 
                 <button type="submit" class="signin-btn" id="signinBtn">
@@ -370,10 +387,22 @@
         const MAX_LOGIN_ATTEMPTS = 5;
         const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
 
+        // Debug function
+        function updateDebug(message) {
+            const debugText = document.getElementById('debugText');
+            if (debugText) {
+                debugText.textContent = message;
+            }
+            console.log('🔧 DEBUG:', message);
+        }
+
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('signinForm');
             form.addEventListener('submit', handleSignin);
+            
+            // Test function availability
+            testFunctionAvailability();
             
             // Check if user is already authenticated
             checkExistingSession();
@@ -382,9 +411,28 @@
             checkAccountLockout();
         });
 
-        // Secure form submission handler
+        // Test if functions are available
+        async function testFunctionAvailability() {
+            try {
+                updateDebug('Testing function availability...');
+                
+                const testResponse = await fetch('/.netlify/functions/test');
+                if (testResponse.ok) {
+                    const testData = await testResponse.json();
+                    updateDebug('✅ Functions working: ' + testData.message);
+                } else {
+                    updateDebug('❌ Functions not responding: ' + testResponse.status);
+                }
+            } catch (error) {
+                updateDebug('❌ Function test failed: ' + error.message);
+            }
+        }
+
+        // Enhanced form submission handler
         async function handleSignin(event) {
             event.preventDefault();
+            
+            updateDebug('Starting login attempt...');
             
             const email = sanitizeInput(document.getElementById('email').value);
             const password = document.getElementById('password').value; // Don't sanitize password
@@ -404,10 +452,17 @@
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading"></span>Signing in...';
+            updateDebug('Sending login request...');
 
             try {
+                // Determine the correct base URL
+                const baseUrl = window.location.origin;
+                const loginUrl = `${baseUrl}/.netlify/functions/auth-login`;
+                
+                updateDebug('Calling: ' + loginUrl);
+
                 // Call secure authentication endpoint
-                const response = await fetch('/.netlify/functions/auth-login', {
+                const response = await fetch(loginUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -418,9 +473,20 @@
                     })
                 });
 
-                const data = await response.json();
+                updateDebug('Response status: ' + response.status);
+
+                let data;
+                try {
+                    data = await response.json();
+                    updateDebug('Response data received');
+                } catch (parseError) {
+                    updateDebug('❌ Failed to parse response JSON: ' + parseError.message);
+                    throw new Error('Invalid response from server');
+                }
 
                 if (response.ok && data.success) {
+                    updateDebug('✅ Login successful!');
+                    
                     // Success - store token securely
                     localStorage.setItem('auth_token', data.token);
                     localStorage.setItem('company_user', JSON.stringify(data.user));
@@ -435,13 +501,16 @@
                         window.location.href = 'company-portal.html';
                     }, 1500);
                 } else {
+                    updateDebug('❌ Login failed: ' + (data.error || 'Unknown error'));
+                    
                     // Failed login
                     recordFailedAttempt();
                     showMessage(data.error || 'Invalid credentials', 'error');
                 }
             } catch (error) {
-                console.error('Login error:', error);
-                showMessage('Connection error. Please try again.', 'error');
+                updateDebug('❌ Network/fetch error: ' + error.message);
+                console.error('Login error details:', error);
+                showMessage('Connection error. Please check your internet connection and try again.', 'error');
             } finally {
                 // Reset button
                 submitBtn.disabled = false;
@@ -453,6 +522,7 @@
         function validateForm(email, password) {
             if (!email || !password) {
                 showMessage('Please fill in all fields', 'error');
+                updateDebug('❌ Validation failed: Empty fields');
                 return false;
             }
 
@@ -460,20 +530,24 @@
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showMessage('Please enter a valid email address', 'error');
+                updateDebug('❌ Validation failed: Invalid email format');
                 return false;
             }
 
             // Password validation
             if (password.length < 6) {
                 showMessage('Password must be at least 6 characters', 'error');
+                updateDebug('❌ Validation failed: Password too short');
                 return false;
             }
 
             if (password.length > 128) {
                 showMessage('Password is too long', 'error');
+                updateDebug('❌ Validation failed: Password too long');
                 return false;
             }
 
+            updateDebug('✅ Form validation passed');
             return true;
         }
 
@@ -492,6 +566,7 @@
             const attempts = getFailedAttempts();
             attempts.push(Date.now());
             localStorage.setItem('failed_attempts', JSON.stringify(attempts));
+            updateDebug('Recorded failed attempt. Total: ' + attempts.length);
         }
 
         function getFailedAttempts() {
@@ -507,6 +582,7 @@
 
         function clearFailedAttempts() {
             localStorage.removeItem('failed_attempts');
+            updateDebug('Cleared failed attempts');
         }
 
         function isAccountLocked() {
@@ -523,13 +599,19 @@
                 
                 showMessage(`Account temporarily locked. Try again in ${minutesRemaining} minutes.`, 'error');
                 document.getElementById('signinBtn').disabled = true;
+                updateDebug('❌ Account locked for ' + minutesRemaining + ' minutes');
             }
         }
 
         // Check existing session
         async function checkExistingSession() {
             const token = localStorage.getItem('auth_token');
-            if (!token) return;
+            if (!token) {
+                updateDebug('No existing session found');
+                return;
+            }
+
+            updateDebug('Checking existing session...');
 
             try {
                 const response = await fetch('/.netlify/functions/auth-verify', {
@@ -544,10 +626,16 @@
                 const data = await response.json();
                 
                 if (response.ok && data.valid) {
+                    updateDebug('✅ Valid session found, redirecting...');
                     // User is already authenticated
                     window.location.href = 'company-portal.html';
+                } else {
+                    updateDebug('❌ Invalid session, clearing storage');
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('company_user');
                 }
             } catch (error) {
+                updateDebug('❌ Session check error: ' + error.message);
                 // Token is invalid, remove it
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('company_user');
