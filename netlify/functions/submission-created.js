@@ -13,17 +13,14 @@ exports.handler = async (event, context) => {
     // Parse the Netlify form submission
     let formData;
     
-    // Check if it's JSON or form data
-    if (event.headers['content-type'] && event.headers['content-type'].includes('application/json')) {
-      const payload = JSON.parse(event.body);
-      formData = payload.data || payload;
-    } else {
-      // Parse URL-encoded form data
-      const params = new URLSearchParams(event.body);
-      formData = {};
-      for (const [key, value] of params) {
-        formData[key] = value;
-      }
+    console.log('Headers:', event.headers);
+    console.log('Raw body:', event.body);
+    
+    // Netlify sends form data as URL-encoded
+    const params = new URLSearchParams(event.body);
+    formData = {};
+    for (const [key, value] of params) {
+      formData[key] = value;
     }
     
     console.log('Parsed form data:', formData);
