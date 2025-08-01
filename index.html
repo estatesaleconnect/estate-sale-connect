@@ -6,6 +6,12 @@
     <title>Estate Sale Connect - Connecting Families with Trusted Estate Sale Professionals</title>
     <meta name="description" content="Find trusted estate sale companies in your area. Get matched with professional estate sale services quickly and easily.">
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com https://upload-widget.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' /.netlify/functions/ https://upload-widget.cloudinary.com">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,6 +294,7 @@
             font-size: 1rem;
             transition: all 0.3s ease;
             background: #fafafa;
+            font-family: 'Inter', sans-serif;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -329,6 +336,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.3s;
+            font-family: 'Inter', sans-serif;
         }
 
         .upload-btn:hover {
@@ -395,9 +403,10 @@
             width: 100%;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+            font-family: 'Inter', sans-serif;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(30, 64, 175, 0.4);
         }
@@ -543,6 +552,17 @@
             display: none;
         }
 
+        /* Error Message */
+        .error-message {
+            background: #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            display: none;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .nav-links {
@@ -589,6 +609,25 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Input validation styles */
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .form-error {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error .form-error {
+            display: block;
         }
     </style>
 </head>
@@ -640,50 +679,74 @@
                     Thank you! Your request has been submitted. You'll be contacted soon by qualified estate sale professionals in your area.
                 </div>
                 
+                <div id="error-message" class="error-message">
+                    Please correct the errors below and try again.
+                </div>
+                
                 <h2>Let's Find the Right Estate Sale Company for You</h2>
                 <p class="form-subtitle">Tell us about your needs, and we'll connect you with caring professionals who specialize in estate sales in your area. It takes just 3 minutes.</p>
                 
                 <div class="form-trust-badge">
-                    🔒 Your information is secure and will only be shared with qualified estate sale companies
+                    🔒 Your information is secure and protected with industry-standard encryption
                 </div>
                 
-                <form id="leadForm" name="estate-sale-leads" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-                    <!-- Hidden field for spam protection -->
-                    <input type="hidden" name="form-name" value="estate-sale-leads">
-                    <div style="display: none;">
-                        <label>Don't fill this out: <input name="bot-field"></label>
-                    </div>
-                    
-                    <!-- Hidden fields for photo data -->
-                    <input type="hidden" name="photo-urls" id="photoUrlsField">
-                    <input type="hidden" name="photo-count" id="photoCountField">
-                    <input type="hidden" name="photo-list" id="photoListField">
-                    
+                <form id="leadForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First Name *</label>
-                            <input type="text" id="firstName" name="firstName" required>
+                            <input type="text" 
+                                   id="firstName" 
+                                   name="firstName" 
+                                   required 
+                                   maxlength="50"
+                                   autocomplete="given-name">
+                            <div class="form-error">Please enter a valid first name</div>
                         </div>
                         <div class="form-group">
                             <label for="lastName">Last Name *</label>
-                            <input type="text" id="lastName" name="lastName" required>
+                            <input type="text" 
+                                   id="lastName" 
+                                   name="lastName" 
+                                   required 
+                                   maxlength="50"
+                                   autocomplete="family-name">
+                            <div class="form-error">Please enter a valid last name</div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   required 
+                                   maxlength="254"
+                                   autocomplete="email">
+                            <div class="form-error">Please enter a valid email address</div>
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
+                            <input type="tel" 
+                                   id="phone" 
+                                   name="phone" 
+                                   required 
+                                   maxlength="20"
+                                   autocomplete="tel">
+                            <div class="form-error">Please enter a valid phone number</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="address">Property Address *</label>
-                        <input type="text" id="address" name="address" placeholder="Street, City, State, ZIP" required>
+                        <input type="text" 
+                               id="address" 
+                               name="address" 
+                               placeholder="Street, City, State, ZIP" 
+                               required 
+                               maxlength="200"
+                               autocomplete="street-address">
+                        <div class="form-error">Please enter a complete address</div>
                     </div>
 
                     <div class="form-row">
@@ -697,6 +760,7 @@
                                 <option value="storage">Storage Unit</option>
                                 <option value="other">Other</option>
                             </select>
+                            <div class="form-error">Please select a property type</div>
                         </div>
                         <div class="form-group">
                             <label for="timeline">Preferred Timeline *</label>
@@ -711,12 +775,19 @@
                                 <option value="flexible">Flexible timing</option>
                                 <option value="planning">Just planning ahead</option>
                             </select>
+                            <div class="form-error">Please select a timeline</div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="details">Additional Details *</label>
-                        <textarea id="details" name="details" rows="4" placeholder="Tell us about the size of the estate, special items, or any specific needs..." required></textarea>
+                        <textarea id="details" 
+                                  name="details" 
+                                  rows="4" 
+                                  placeholder="Tell us about the size of the estate, special items, or any specific needs..." 
+                                  required 
+                                  maxlength="2000"></textarea>
+                        <div class="form-error">Please provide more details (at least 10 characters)</div>
                     </div>
 
                     <div class="form-group">
@@ -819,20 +890,171 @@
         let uploadedPhotos = [];
         let cloudinaryWidget = null;
 
+        // Constants for validation
+        const MAX_PHOTOS = 12;
+        const MAX_NAME_LENGTH = 50;
+        const MAX_ADDRESS_LENGTH = 200;
+        const MAX_DETAILS_LENGTH = 2000;
+        const MIN_DETAILS_LENGTH = 10;
+
+        // Input sanitization function
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            
+            // Remove potential XSS vectors and HTML tags
+            return input
+                .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+                .replace(/javascript:/gi, '')
+                .replace(/on\w+\s*=/gi, '')
+                .replace(/<[^>]*>/g, '')
+                .trim();
+        }
+
+        // Email validation
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email) && email.length <= 254;
+        }
+
+        // Phone validation
+        function isValidPhone(phone) {
+            const cleaned = phone.replace(/[^0-9+\-() ]/g, '');
+            return cleaned.length >= 10 && cleaned.length <= 20;
+        }
+
+        // Real-time validation functions
+        function validateField(field) {
+            const formGroup = field.closest('.form-group');
+            const errorElement = formGroup.querySelector('.form-error');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Remove previous error state
+            formGroup.classList.remove('error');
+
+            const value = sanitizeInput(field.value);
+            
+            switch (field.name) {
+                case 'firstName':
+                case 'lastName':
+                    if (!value || value.length < 1) {
+                        errorMessage = 'This field is required';
+                        isValid = false;
+                    } else if (value.length > MAX_NAME_LENGTH) {
+                        errorMessage = `Maximum ${MAX_NAME_LENGTH} characters allowed`;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'email':
+                    if (!value) {
+                        errorMessage = 'Email is required';
+                        isValid = false;
+                    } else if (!isValidEmail(value)) {
+                        errorMessage = 'Please enter a valid email address';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'phone':
+                    if (!value) {
+                        errorMessage = 'Phone number is required';
+                        isValid = false;
+                    } else if (!isValidPhone(value)) {
+                        errorMessage = 'Please enter a valid phone number';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'address':
+                    if (!value) {
+                        errorMessage = 'Address is required';
+                        isValid = false;
+                    } else if (value.length < 10) {
+                        errorMessage = 'Please enter a complete address';
+                        isValid = false;
+                    } else if (value.length > MAX_ADDRESS_LENGTH) {
+                        errorMessage = `Maximum ${MAX_ADDRESS_LENGTH} characters allowed`;
+                        isValid = false;
+                    }
+                    break;
+
+                case 'propertyType':
+                    if (!value) {
+                        errorMessage = 'Please select a property type';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'timeline':
+                    if (!value) {
+                        errorMessage = 'Please select a timeline';
+                        isValid = false;
+                    }
+                    break;
+
+                case 'details':
+                    if (!value) {
+                        errorMessage = 'Details are required';
+                        isValid = false;
+                    } else if (value.length < MIN_DETAILS_LENGTH) {
+                        errorMessage = `Please provide at least ${MIN_DETAILS_LENGTH} characters`;
+                        isValid = false;
+                    } else if (value.length > MAX_DETAILS_LENGTH) {
+                        errorMessage = `Maximum ${MAX_DETAILS_LENGTH} characters allowed`;
+                        isValid = false;
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                formGroup.classList.add('error');
+                errorElement.textContent = errorMessage;
+            }
+
+            return isValid;
+        }
+
         // Wait for page to load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Page loaded, initializing photo upload...');
+            console.log('Page loaded, initializing secure form...');
             
             // Initialize form submission handler
             const form = document.getElementById('leadForm');
             if (form) {
                 form.addEventListener('submit', handleFormSubmission);
+                
+                // Add real-time validation to all inputs
+                const inputs = form.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => validateField(input));
+                    input.addEventListener('input', debounce(() => validateField(input), 300));
+                });
             }
         });
+
+        // Debounce function for real-time validation
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
 
         // Cloudinary upload function
         function openPhotoUpload() {
             console.log('Opening Cloudinary upload...');
+            
+            if (uploadedPhotos.length >= MAX_PHOTOS) {
+                alert(`Maximum ${MAX_PHOTOS} photos allowed`);
+                return;
+            }
             
             // Check if Cloudinary is loaded
             if (typeof cloudinary === 'undefined') {
@@ -847,22 +1069,24 @@
                         cloudName: 'dfy6vlrtn',
                         uploadPreset: 'estate_photos_unsigned',
                         multiple: true,
-                        maxFiles: 12,
+                        maxFiles: MAX_PHOTOS - uploadedPhotos.length,
                         sources: ['local'],
-                        resourceType: 'image'
+                        resourceType: 'image',
+                        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+                        maxFileSize: 10000000, // 10MB
+                        maxImageWidth: 2000,
+                        maxImageHeight: 2000
                     }, function(error, result) {
                         handleCloudinaryResult(error, result);
                     });
                 } catch (error) {
                     console.error('Error creating Cloudinary widget:', error);
-                    // Fallback to file input if Cloudinary fails
-                    alert('Cloudinary upload temporarily unavailable. Using backup upload method.');
+                    alert('Photo upload temporarily unavailable. Using backup upload method.');
                     document.getElementById('photoInput').click();
                     return;
                 }
             }
 
-            // Open the widget
             cloudinaryWidget.open();
         }
 
@@ -876,20 +1100,24 @@
 
             if (result && result.event === "success") {
                 console.log('Photo uploaded successfully!');
-                console.log('Secure URL:', result.info.secure_url);
-                console.log('Public ID:', result.info.public_id);
+                
+                // Validate URL is from Cloudinary
+                if (!result.info.secure_url.startsWith('https://res.cloudinary.com/')) {
+                    console.error('Invalid upload URL');
+                    return;
+                }
                 
                 const photoData = {
                     url: result.info.secure_url,
                     publicId: result.info.public_id,
-                    fileName: result.info.original_filename || 'uploaded_image'
+                    fileName: sanitizeInput(result.info.original_filename) || 'uploaded_image'
                 };
                 
-                uploadedPhotos.push(photoData);
-                addPhotoPreview(photoData);
-                updatePhotoUrlsField();
-                
-                // Photo uploaded silently - user can see the preview appear
+                if (uploadedPhotos.length < MAX_PHOTOS) {
+                    uploadedPhotos.push(photoData);
+                    addPhotoPreview(photoData);
+                    updatePhotoUrlsField();
+                }
             }
         }
 
@@ -902,11 +1130,22 @@
             }
 
             const files = Array.from(input.files);
-            console.log('Files selected:', files.length);
+            const remainingSlots = MAX_PHOTOS - uploadedPhotos.length;
+            
+            if (files.length > remainingSlots) {
+                alert(`Only ${remainingSlots} more photos can be added`);
+                files.splice(remainingSlots);
+            }
 
             files.forEach((file, index) => {
                 if (!file.type.startsWith('image/')) {
                     console.warn('Skipping non-image file:', file.name);
+                    return;
+                }
+
+                // Validate file size (10MB max)
+                if (file.size > 10000000) {
+                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
                     return;
                 }
 
@@ -915,7 +1154,7 @@
                     const photoData = {
                         url: e.target.result,
                         publicId: 'local_' + Date.now() + '_' + index,
-                        fileName: file.name,
+                        fileName: sanitizeInput(file.name),
                         isLocal: true
                     };
                     
@@ -942,8 +1181,12 @@
 
             const photoElement = document.createElement('div');
             photoElement.className = 'photo-preview-item';
+            
+            // Sanitize file name for display
+            const safeFileName = escapeHtml(photoData.fileName);
+            
             photoElement.innerHTML = `
-                <img src="${photoData.url}" alt="${photoData.fileName}" loading="lazy">
+                <img src="${photoData.url}" alt="${safeFileName}" loading="lazy">
                 <button type="button" class="photo-remove" onclick="removePhotoPreview('${photoData.publicId}', this)" title="Remove photo">×</button>
             `;
 
@@ -965,63 +1208,85 @@
             updatePhotoUrlsField();
         }
 
-        // Update hidden field with photo URLs
+        // Update photo URLs for form submission
         function updatePhotoUrlsField() {
-            const photoUrlsField = document.getElementById('photoUrlsField');
-            const photoCountField = document.getElementById('photoCountField');
-            const photoListField = document.getElementById('photoListField');
+            // Filter to only include valid Cloudinary URLs for security
+            const validUrls = uploadedPhotos
+                .filter(photo => 
+                    photo.url.startsWith('https://res.cloudinary.com/') || 
+                    photo.url.startsWith('data:image/')
+                )
+                .map(photo => photo.url)
+                .join(' ');
             
-            if (photoUrlsField && photoCountField && photoListField) {
-                // Use space separation instead of commas to avoid breaking URLs
-                const rawUrls = uploadedPhotos.map(photo => photo.url).join(' ');
-                photoUrlsField.value = rawUrls;
-                
-                // Count of photos
-                photoCountField.value = uploadedPhotos.length;
-                
-                // Formatted list with line breaks for email readability
-                const photoList = uploadedPhotos.map((photo, index) => {
-                    return `Photo ${index + 1}: ${photo.url}`;
-                }).join('\n\n');
-                photoListField.value = photoList;
-                
-                console.log('Updated photo data - Count:', uploadedPhotos.length);
-                console.log('Space-separated URLs:', rawUrls);
-            }
+            console.log('Updated photo data - Count:', uploadedPhotos.length);
         }
 
-        // Handle form submission
-        function handleFormSubmission(event) {
+        // Secure form submission
+        async function handleFormSubmission(event) {
             event.preventDefault();
-            console.log('Form submission started...');
+            console.log('Secure form submission started...');
             
             const submitBtn = document.getElementById('submitBtn');
             const originalText = submitBtn.textContent;
+            
+            // Hide previous messages
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            
+            // Validate all fields
+            const form = event.target;
+            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+            let isFormValid = true;
+            
+            inputs.forEach(input => {
+                if (!validateField(input)) {
+                    isFormValid = false;
+                }
+            });
+            
+            if (!isFormValid) {
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('error-message').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
             
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
             
-            // Update photo URLs field one more time
-            updatePhotoUrlsField();
+            // Prepare sanitized data
+            const formData = {
+                firstName: sanitizeInput(document.getElementById('firstName').value),
+                lastName: sanitizeInput(document.getElementById('lastName').value),
+                email: sanitizeInput(document.getElementById('email').value.toLowerCase()),
+                phone: sanitizeInput(document.getElementById('phone').value),
+                address: sanitizeInput(document.getElementById('address').value),
+                propertyType: document.getElementById('propertyType').value,
+                timeline: document.getElementById('timeline').value,
+                details: sanitizeInput(document.getElementById('details').value),
+                'photo-urls': uploadedPhotos
+                    .filter(photo => 
+                        photo.url.startsWith('https://res.cloudinary.com/') || 
+                        photo.url.startsWith('data:image/')
+                    )
+                    .map(photo => photo.url)
+                    .join(' ')
+            };
             
-            // Create FormData for submission
-            const formData = new FormData(event.target);
-            
-            // Log form data for debugging
-            console.log('Form data being submitted:');
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-            
-            // Submit to Netlify
-            fetch('/', {
-                method: 'POST',
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams(formData).toString()
-            })
-            .then(response => {
-                if (response.ok) {
+            try {
+                // Submit to secure validation endpoint
+                const response = await fetch('/.netlify/functions/validate-lead-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
                     // Show success message
                     document.getElementById('success-message').style.display = 'block';
                     
@@ -1029,25 +1294,41 @@
                     event.target.reset();
                     uploadedPhotos = [];
                     document.getElementById('photoPreview').innerHTML = '';
-                    updatePhotoUrlsField();
+                    
+                    // Remove all error states
+                    document.querySelectorAll('.form-group.error').forEach(group => {
+                        group.classList.remove('error');
+                    });
                     
                     // Scroll to success message
                     document.getElementById('success-message').scrollIntoView({ 
                         behavior: 'smooth' 
                     });
                 } else {
-                    throw new Error('Network response was not ok');
+                    throw new Error(result.error || 'Validation failed');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Form submission error:', error);
-                alert('There was an error submitting your form. Please try again.');
-            })
-            .finally(() => {
+                document.getElementById('error-message').textContent = 'There was an error submitting your form. Please try again.';
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('error-message').scrollIntoView({ behavior: 'smooth' });
+            } finally {
                 // Reset button
                 submitBtn.disabled = false;
                 submitBtn.textContent = originalText;
-            });
+            }
+        }
+
+        // HTML escaping function
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
         }
 
         // Smooth scrolling for anchor links
@@ -1063,6 +1344,11 @@
                 }
             });
         });
+
+        // Make functions globally available for onclick handlers
+        window.removePhotoPreview = removePhotoPreview;
+        window.openPhotoUpload = openPhotoUpload;
+        window.handlePhotoSelection = handlePhotoSelection;
     </script>
 </body>
 </html>
