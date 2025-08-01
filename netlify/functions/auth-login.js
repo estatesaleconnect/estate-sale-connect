@@ -1,45 +1,35 @@
 // netlify/functions/auth-login.js
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Pre-hashed demo passwords for security
-const SECURE_COMPANIES = [
-  {
+// Simple demo credentials (for immediate testing)
+const DEMO_CREDENTIALS = {
+  'demo@estatesales.com': {
     id: 1,
-    email: 'demo@estatesales.com',
-    // Password: demo123 - hash generated with: bcrypt.hashSync('demo123', 12)
-    passwordHash: '$2a$12$LQv3c1yqBWVHxkd0LQ1lqe.RqWpkC6Bt7FKwfG9rKt8qlgFYD7.Fi',
+    password: 'demo123',
     companyName: 'Demo Estate Sales',
-    isActive: true,
     subscriptionStatus: 'active',
-    createdAt: '2024-01-01T00:00:00Z'
+    isActive: true
   },
-  {
+  'premium@estatesales.com': {
     id: 2,
-    email: 'premium@estatesales.com',
-    // Password: premium123
-    passwordHash: '$2a$12$8Hqx9kQjFz2kS7gL9PmNde.jQwE5rXtY6bVcH8fM1nOp3sKlGhDwq',
+    password: 'premium123',
     companyName: 'Premium Estate Sales',
-    isActive: true,
     subscriptionStatus: 'active',
-    createdAt: '2024-01-01T00:00:00Z'
+    isActive: true
   },
-  {
+  'charlotte@estatesales.com': {
     id: 3,
-    email: 'charlotte@estatesales.com',
-    // Password: charlotte123
-    passwordHash: '$2a$12$mN7vQ2fK8bT5wR9xE1cYte.pL3dS6jH9gA2nV4kM7qO8rT1lUiExF',
+    password: 'charlotte123',
     companyName: 'Charlotte Estate Solutions',
-    isActive: true,
     subscriptionStatus: 'active',
-    createdAt: '2024-01-01T00:00:00Z'
+    isActive: true
   }
-];
+};
 
 exports.handler = async (event, context) => {
   console.log('🔐 Auth login function called');
   console.log('Method:', event.httpMethod);
-  console.log('Headers:', JSON.stringify(event.headers, null, 2));
+  console.log('Body:', event.body);
 
   // CORS headers for all responses
   const corsHeaders = {
@@ -71,20 +61,18 @@ exports.handler = async (event, context) => {
 
   try {
     console.log('📝 Parsing request body...');
-    console.log('Raw body:', event.body);
 
     let requestData;
     try {
       requestData = JSON.parse(event.body);
-      console.log('✅ Request data parsed successfully');
+      console.log('✅ Request data parsed:', { email: requestData.email, hasPassword: !!requestData.password });
     } catch (parseError) {
       console.log('❌ JSON parse error:', parseError.message);
       return {
         statusCode: 400,
         headers: corsHeaders,
         body: JSON.stringify({ 
-          error: 'Invalid JSON in request body',
-          details: parseError.message 
+          error: 'Invalid JSON in request body'
         })
       };
     }
@@ -117,22 +105,18 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Rate limiting check (simple implementation)
-    const clientIP = event.headers['client-ip'] || event.headers['x-forwarded-for'] || 'unknown';
-    console.log('🌐 Client IP:', clientIP);
-
-    // Find user by email
-    console.log('🔍 Looking up user...');
-    const user = SECURE_COMPANIES.find(u => u.email.toLowerCase() === email.toLowerCase());
+    // Find user
+    console.log('🔍 Looking up user in demo credentials...');
+    const user = DEMO_CREDENTIALS[email.toLowerCase()];
     
     if (!user) {
       console.log('❌ User not found:', email);
-      // Don't reveal if email exists or not
+      console.log('Available emails:', Object.keys(DEMO_CREDENTIALS));
       return {
         statusCode: 401,
         headers: corsHeaders,
         body: JSON.stringify({ 
-          error: 'Invalid credentials' 
+          error: 'Invalid credentials - user not found' 
         })
       };
     }
@@ -151,39 +135,18 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Verify password
-    console.log('🔑 Verifying password...');
+    // Simple password check
+    console.log('🔑 Checking password...');
+    console.log('Expected password:', user.password);
+    console.log('Provided password:', password);
     
-    // For demo purposes, also accept plain text passwords
-    let isValidPassword = false;
-    
-    // First try bcrypt comparison
-    try {
-      isValidPassword = await bcrypt.compare(password, user.passwordHash);
-      console.log('🔑 Bcrypt comparison result:', isValidPassword);
-    } catch (bcryptError) {
-      console.log('⚠️ Bcrypt error, trying plain text comparison:', bcryptError.message);
-      
-      // Fallback: check if it's the demo password in plain text
-      const demoPasswords = {
-        'demo@estatesales.com': 'demo123',
-        'premium@estatesales.com': 'premium123',
-        'charlotte@estatesales.com': 'charlotte123'
-      };
-      
-      if (demoPasswords[email] && demoPasswords[email] === password) {
-        isValidPassword = true;
-        console.log('✅ Plain text password match (demo mode)');
-      }
-    }
-    
-    if (!isValidPassword) {
-      console.log('❌ Password verification failed');
+    if (user.password !== password) {
+      console.log('❌ Password mismatch');
       return {
         statusCode: 401,
         headers: corsHeaders,
         body: JSON.stringify({ 
-          error: 'Invalid credentials' 
+          error: 'Invalid credentials - password mismatch' 
         })
       };
     }
@@ -193,25 +156,27 @@ exports.handler = async (event, context) => {
     // Generate JWT token
     console.log('🎫 Generating JWT token...');
     
-    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-demo';
-    console.log('🔐 JWT Secret available:', !!process.env.JWT_SECRET);
+    const jwtSecret = process.env.JWT_SECRET || 'demo-secret-key-12345';
+    console.log('🔐 Using JWT Secret:', jwtSecret.substring(0, 10) + '...');
     
     const tokenPayload = {
       userId: user.id,
-      email: user.email,
+      email: email,
       companyName: user.companyName,
       subscriptionStatus: user.subscriptionStatus,
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours
     };
 
-    const token = jwt.sign(tokenPayload, jwtSecret);
-    console.log('✅ JWT token generated successfully');
+    console.log('Token payload:', tokenPayload);
 
-    // Prepare user data (without sensitive information)
+    const token = jwt.sign(tokenPayload, jwtSecret);
+    console.log('✅ JWT token generated:', token.substring(0, 20) + '...');
+
+    // Prepare user data
     const userData = {
       id: user.id,
-      email: user.email,
+      email: email,
       companyName: user.companyName,
       subscriptionStatus: user.subscriptionStatus,
       loginTime: new Date().toISOString()
@@ -219,18 +184,19 @@ exports.handler = async (event, context) => {
 
     console.log('✅ Login successful for:', user.companyName);
 
+    const response = {
+      success: true,
+      user: userData,
+      token: token,
+      message: 'Login successful'
+    };
+
+    console.log('📤 Sending response:', response);
+
     return {
       statusCode: 200,
-      headers: {
-        ...corsHeaders,
-        'Set-Cookie': `auth_token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=86400; Path=/`
-      },
-      body: JSON.stringify({
-        success: true,
-        user: userData,
-        token: token,
-        message: 'Login successful'
-      })
+      headers: corsHeaders,
+      body: JSON.stringify(response)
     };
 
   } catch (error) {
@@ -242,7 +208,8 @@ exports.handler = async (event, context) => {
       headers: corsHeaders,
       body: JSON.stringify({ 
         error: 'Internal server error',
-        message: 'An unexpected error occurred during authentication'
+        details: error.message,
+        stack: error.stack
       })
     };
   }
