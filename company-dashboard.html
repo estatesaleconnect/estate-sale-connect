@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Leads Dashboard - Estate Sale Connect</title>
     
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.netlify.app https://*.netlify.com">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,6 +127,18 @@
             color: white;
         }
 
+        /* Debug Info */
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #374151;
+            font-family: monospace;
+        }
+
         /* Main Content */
         .main-content {
             padding: 40px 0;
@@ -148,66 +165,6 @@
             color: #6b7280;
             font-size: 1.1rem;
             margin-bottom: 30px;
-        }
-
-        /* Filters and Search */
-        .filters-section {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            margin-bottom: 30px;
-            border: 1px solid #e5e7eb;
-        }
-
-        .filters-grid {
-            display: grid;
-            grid-template-columns: 1fr 200px 150px 120px 120px;
-            gap: 20px;
-            align-items: end;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .filter-group label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #374151;
-            font-size: 0.9rem;
-        }
-
-        .filter-group input,
-        .filter-group select {
-            padding: 10px 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: border-color 0.3s;
-        }
-
-        .filter-group input:focus,
-        .filter-group select:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .filter-btn {
-            background: #10b981;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            height: fit-content;
-        }
-
-        .filter-btn:hover {
-            background: #059669;
         }
 
         /* Stats Dashboard */
@@ -255,12 +212,64 @@
             color: #059669;
         }
 
-        .stat-change.negative {
-            color: #dc2626;
+        /* Demo Message */
+        .demo-message {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        /* Lead Management Table */
-        .leads-section {
+        .demo-message h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .demo-message p {
+            color: #6b7280;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .demo-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .demo-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .demo-btn.secondary {
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .demo-btn.secondary:hover {
+            background: #f1f5f9;
+            color: #374151;
+        }
+
+        /* Features Preview */
+        .features-preview {
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -268,341 +277,58 @@
             overflow: hidden;
         }
 
-        .section-header {
+        .features-header {
             padding: 25px;
             border-bottom: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: #f8fafc;
         }
 
-        .section-title {
+        .features-title {
             font-size: 1.5rem;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .export-btn {
-            background: #6366f1;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .export-btn:hover {
-            background: #5555eb;
-        }
-
-        /* Lead Cards in Dashboard */
-        .leads-grid {
-            padding: 25px;
-            display: grid;
-            gap: 20px;
-        }
-
-        .lead-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            background: #fafafa;
-        }
-
-        .lead-item:hover {
-            border-color: #3b82f6;
-            background: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .lead-item-header {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            gap: 20px;
-            align-items: start;
-            margin-bottom: 15px;
-        }
-
-        .lead-basic-info h3 {
-            font-size: 1.2rem;
             font-weight: 600;
             color: #1f2937;
             margin-bottom: 5px;
         }
 
-        .lead-basic-info p {
+        .features-subtitle {
             color: #6b7280;
             font-size: 0.9rem;
         }
 
-        .lead-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .status-contacted {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .status-in-progress {
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-completed {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-new {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .lead-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            padding: 6px 12px;
-            border: 1px solid #d1d5db;
-            background: white;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        .action-btn:hover {
-            background: #f3f4f6;
-            border-color: #9ca3af;
-        }
-
-        .action-btn.primary {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
-
-        .action-btn.primary:hover {
-            background: #2563eb;
-        }
-
-        .lead-details-grid {
+        .features-grid {
+            padding: 30px;
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
         }
 
-        .lead-contact-info {
-            background: #f8fafc;
-            padding: 15px;
+        .feature-item {
+            padding: 20px;
+            border: 1px solid #e5e7eb;
             border-radius: 8px;
+            transition: all 0.3s ease;
         }
 
-        .contact-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
+        .feature-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
         }
 
-        .contact-label {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .lead-timeline-info {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .timeline-item {
-            background: #f1f5f9;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-
-        .timeline-date {
-            font-weight: 600;
-            color: #1e40af;
-        }
-
-        /* Notes Section */
-        .notes-section {
-            border-top: 1px solid #e5e7eb;
-            padding-top: 15px;
-        }
-
-        .notes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .feature-icon {
+            font-size: 2rem;
             margin-bottom: 10px;
         }
 
-        .notes-title {
-            font-weight: 600;
-            color: #374151;
-            font-size: 0.9rem;
-        }
-
-        .add-note-btn {
-            background: #10b981;
-            color: white;
-            padding: 4px 8px;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .notes-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .note-item {
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            line-height: 1.4;
-        }
-
-        .note-meta {
-            font-size: 0.7rem;
-            color: #6b7280;
-            margin-top: 5px;
-        }
-
-        /* Add Note Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
+        .feature-title {
             font-weight: 600;
             color: #1f2937;
+            margin-bottom: 8px;
         }
 
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .modal-form textarea {
-            padding: 12px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-family: inherit;
+        .feature-description {
+            color: #6b7280;
             font-size: 0.9rem;
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .modal-form textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .modal-btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s;
-        }
-
-        .modal-btn.cancel {
-            background: #f3f4f6;
-            color: #374151;
-        }
-
-        .modal-btn.save {
-            background: #10b981;
-            color: white;
-        }
-
-        .modal-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .lead-item-header {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .lead-details-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-links {
-                display: none;
-            }
+            line-height: 1.5;
         }
 
         /* Loading State */
@@ -627,6 +353,25 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .demo-actions {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -641,11 +386,11 @@
                 <li><a href="mailto:info@estatesaleconnect.com">Support</a></li>
                 <li>
                     <div class="user-info">
-                        <span>👤 Loading...</span>
-                        <span class="subscription-status status-active">Active Subscription</span>
+                        <span id="userDisplay">👤 Loading...</span>
+                        <span class="subscription-status status-active" id="subscriptionStatus">Active Subscription</span>
                     </div>
                 </li>
-                <li><a href="#" class="logout-btn">Logout</a></li>
+                <li><a href="#" class="logout-btn" onclick="handleLogout(event)">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -653,194 +398,245 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
+            <!-- Debug Info -->
+            <div class="debug-info" id="debugInfo">
+                🔧 <strong>Debug:</strong> <span id="debugText">Initializing dashboard...</span>
+            </div>
+
             <!-- Dashboard Header -->
             <div class="dashboard-header">
-                <h1 class="dashboard-title">Lead Dashboard</h1>
-                <p class="dashboard-subtitle">Manage and track all your purchased estate sale leads in one place</p>
+                <h1 class="dashboard-title" id="dashboardTitle">Company Dashboard</h1>
+                <p class="dashboard-subtitle">Manage and track your estate sale leads and business performance</p>
                 
                 <!-- Quick Actions -->
-                <div style="display: flex; gap: 15px; margin-top: 20px;">
-                    <button onclick="exportLeads()" class="export-btn">
-                        📊 Export to CSV
-                    </button>
-                    <button onclick="window.location.href='company-portal.html'" class="filter-btn">
+                <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                    <a href="company-portal.html" class="demo-btn">
                         🔍 Browse New Leads
+                    </a>
+                    <button onclick="window.print()" class="demo-btn secondary">
+                        📊 Print Report
                     </button>
+                    <a href="mailto:info@estatesaleconnect.com" class="demo-btn secondary">
+                        💬 Contact Support
+                    </a>
                 </div>
             </div>
 
-            <!-- Filters Section -->
-            <div class="filters-section">
-                <form class="filters-grid" id="filterForm">
-                    <div class="filter-group">
-                        <label for="searchText">Search Leads</label>
-                        <input type="text" id="searchText" placeholder="Search by name, location, or notes...">
-                    </div>
-                    <div class="filter-group">
-                        <label for="statusFilter">Status</label>
-                        <select id="statusFilter">
-                            <option value="">All Statuses</option>
-                            <option value="new">New</option>
-                            <option value="contacted">Contacted</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="completed">Completed</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="timelineFilter">Timeline</label>
-                        <select id="timelineFilter">
-                            <option value="">All Timelines</option>
-                            <option value="asap">ASAP</option>
-                            <option value="month">Within Month</option>
-                            <option value="flexible">Flexible</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label for="dateFrom">Date From</label>
-                        <input type="date" id="dateFrom">
-                    </div>
-                    <button type="submit" class="filter-btn">Filter</button>
-                </form>
+            <!-- Loading State -->
+            <div id="loadingState" class="loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Loading your dashboard...</p>
             </div>
 
             <!-- Stats Grid -->
-            <div class="stats-grid">
+            <div class="stats-grid" id="statsGrid">
                 <div class="stat-card">
                     <div class="stat-number" id="totalPurchased">0</div>
                     <div class="stat-label">Total Purchased</div>
-                    <div class="stat-change positive">+3 this week</div>
+                    <div class="stat-change positive">Ready for leads</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="activeLeads">0</div>
                     <div class="stat-label">Active Leads</div>
-                    <div class="stat-change positive">+2 in progress</div>
+                    <div class="stat-change positive">Start purchasing</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="completedLeads">0</div>
                     <div class="stat-label">Completed</div>
-                    <div class="stat-change positive">+1 this week</div>
+                    <div class="stat-change positive">Track success</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="conversionRate">0%</div>
-                    <div class="stat-label">Conversion Rate</div>
-                    <div class="stat-change positive">+5% this month</div>
+                    <div class="stat-number" id="conversionRate">100%</div>
+                    <div class="stat-label">Success Rate</div>
+                    <div class="stat-change positive">Perfect start</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="totalSpent">$0</div>
-                    <div class="stat-label">Total Spent</div>
-                    <div class="stat-change">This month</div>
+                    <div class="stat-label">Total Invested</div>
+                    <div class="stat-change">Ready to begin</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number" id="avgResponse">2.4h</div>
+                    <div class="stat-number" id="avgResponse">< 1h</div>
                     <div class="stat-label">Avg Response Time</div>
-                    <div class="stat-change positive">-30min improved</div>
+                    <div class="stat-change positive">Lightning fast</div>
                 </div>
             </div>
 
-            <!-- Leads Management Section -->
-            <div class="leads-section">
-                <div class="section-header">
-                    <h2 class="section-title">My Purchased Leads</h2>
-                    <button onclick="exportLeads()" class="export-btn">
-                        📄 Export All
-                    </button>
+            <!-- Demo Message -->
+            <div class="demo-message">
+                <h3>🚀 Welcome to Your Estate Sale Dashboard!</h3>
+                <p>Your dashboard is ready to track your estate sale lead purchases and business performance. Start by browsing available leads in your area to see real data appear here.</p>
+                
+                <div class="demo-actions">
+                    <a href="company-portal.html" class="demo-btn">
+                        Browse Available Leads
+                    </a>
+                    <a href="#" class="demo-btn secondary" onclick="showUpcomingFeatures()">
+                        See Upcoming Features
+                    </a>
                 </div>
+            </div>
 
-                <!-- Loading State -->
-                <div id="loadingState" class="loading" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <p>Loading your leads...</p>
+            <!-- Features Preview -->
+            <div class="features-preview" id="featuresPreview" style="display: none;">
+                <div class="features-header">
+                    <h2 class="features-title">Coming Soon to Your Dashboard</h2>
+                    <p class="features-subtitle">Advanced features being developed for estate sale professionals</p>
                 </div>
-
-                <!-- Leads Grid -->
-                <div class="leads-grid" id="leadsGrid">
-                    <!-- Leads will be populated by JavaScript -->
+                
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">Advanced Analytics</div>
+                        <div class="feature-description">
+                            Detailed performance metrics, conversion tracking, and ROI analysis for your lead purchases.
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">📧</div>
+                        <div class="feature-title">Email Integration</div>
+                        <div class="feature-description">
+                            Automated email campaigns for lead follow-up and customer relationship management.
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">📅</div>
+                        <div class="feature-title">Calendar Sync</div>
+                        <div class="feature-description">
+                            Integrated scheduling with your calendar for property visits and estate sale planning.
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">💰</div>
+                        <div class="feature-title">Revenue Tracking</div>
+                        <div class="feature-description">
+                            Track commission earnings and calculate ROI on your lead investments automatically.
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Lead Scoring</div>
+                        <div class="feature-description">
+                            AI-powered lead quality scoring to help you prioritize the best opportunities.
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">📱</div>
+                        <div class="feature-title">Mobile App</div>
+                        <div class="feature-description">
+                            Native mobile app for managing leads and responding to opportunities on the go.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Add Note Modal -->
-    <div class="modal" id="noteModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Add Note</h3>
-            </div>
-            <form class="modal-form" id="noteForm">
-                <textarea placeholder="Enter your note about this lead..." id="noteText" required></textarea>
-                <div class="modal-actions">
-                    <button type="button" class="modal-btn cancel" onclick="closeNoteModal()">Cancel</button>
-                    <button type="submit" class="modal-btn save">Save Note</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
         // Global variables
-        let myLeads = [];
-        let filteredLeads = [];
-        let currentNoteLeadId = null;
         let currentUser = null;
-        let SUPABASE_URL = '';
-        let SUPABASE_ANON_KEY = '';
+        let authToken = null;
 
-        // Check authentication before anything else
-        function checkAuthentication() {
-            const user = sessionStorage.getItem('company_user');
-            if (!user) {
-                console.log('No user session found, redirecting to sign-in');
-                window.location.href = 'company-signin.html';
-                return false;
+        // Debug function
+        function updateDebug(message) {
+            const debugText = document.getElementById('debugText');
+            if (debugText) {
+                debugText.textContent = message;
             }
-            
+            console.log('🔧 DEBUG:', message);
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+        });
+
+        // Initialize dashboard with secure authentication
+        async function initializeDashboard() {
             try {
-                const userData = JSON.parse(user);
-                const loginTime = new Date(userData.loginTime);
-                const now = new Date();
-                const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60);
+                updateDebug('Checking authentication...');
                 
-                // Session expires after 24 hours
-                if (hoursSinceLogin > 24) {
-                    console.log('Session expired, redirecting to sign-in');
-                    sessionStorage.removeItem('company_user');
+                // Check authentication first - will redirect if not authenticated
+                const authResult = await checkAuthentication();
+                if (!authResult.success) {
+                    updateDebug('Authentication failed, redirecting to sign-in');
                     window.location.href = 'company-signin.html';
-                    return false;
+                    return;
                 }
+
+                currentUser = authResult.user;
+                authToken = authResult.token;
                 
-                console.log('User authenticated:', userData.company);
-                currentUser = userData;
+                updateDebug('✅ Authenticated: ' + currentUser.companyName);
                 
                 // Update UI with user info
                 updateUserInterface();
                 
-                return true;
+                // Load dashboard data
+                loadDashboardData();
+                
+                updateDebug('✅ Dashboard initialized successfully');
             } catch (error) {
-                console.error('Error parsing user session:', error);
-                sessionStorage.removeItem('company_user');
-                window.location.href = 'company-signin.html';
-                return false;
+                updateDebug('❌ Failed to initialize dashboard: ' + error.message);
+                console.error('Dashboard initialization error:', error);
             }
         }
 
-        // Load configuration securely from environment variables
-        async function loadSecureConfig() {
+        // Check authentication (same as portal)
+        async function checkAuthentication() {
             try {
-                const response = await fetch('/.netlify/functions/get-config');
+                const token = localStorage.getItem('auth_token');
+                const userStr = localStorage.getItem('company_user');
                 
-                if (!response.ok) {
-                    throw new Error(`Failed to load configuration: ${response.status}`);
+                if (!token || !userStr) {
+                    return { success: false, error: 'No authentication found' };
                 }
+
+                updateDebug('Found stored token, verifying...');
+
+                // Verify token with server
+                const response = await fetch('/.netlify/functions/auth-verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ token })
+                });
+
+                if (!response.ok) {
+                    updateDebug('Token verification failed: ' + response.status);
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('company_user');
+                    return { success: false, error: 'Invalid authentication' };
+                }
+
+                const data = await response.json();
                 
-                const config = await response.json();
-                SUPABASE_URL = config.supabaseUrl;
-                SUPABASE_ANON_KEY = config.supabaseAnonKey;
-                
-                console.log('✅ Configuration loaded securely');
-                
+                if (!data.valid) {
+                    updateDebug('Token invalid');
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('company_user');
+                    return { success: false, error: 'Token expired' };
+                }
+
+                updateDebug('✅ Authentication verified');
+                return { 
+                    success: true, 
+                    user: data.user,
+                    token: token
+                };
+
             } catch (error) {
-                console.error('❌ Failed to load secure configuration:', error);
-                throw error;
+                updateDebug('Authentication check error: ' + error.message);
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('company_user');
+                return { success: false, error: 'Authentication error' };
             }
         }
 
@@ -848,460 +644,90 @@
         function updateUserInterface() {
             if (!currentUser) return;
             
-            // Update company name in header
-            const userInfoSpan = document.querySelector('.user-info span');
-            if (userInfoSpan) {
-                userInfoSpan.textContent = `👤 ${currentUser.company}`;
+            // Update user display
+            const userDisplay = document.getElementById('userDisplay');
+            if (userDisplay) {
+                userDisplay.textContent = `👤 ${currentUser.companyName}`;
             }
             
             // Update dashboard title
-            const dashboardTitle = document.querySelector('.dashboard-title');
+            const dashboardTitle = document.getElementById('dashboardTitle');
             if (dashboardTitle) {
-                dashboardTitle.textContent = `${currentUser.company} Dashboard`;
+                dashboardTitle.textContent = `${currentUser.companyName} Dashboard`;
             }
-        }
-
-        // Initialize dashboard (only if authenticated)
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeDashboard();
-        });
-
-        // Initialize dashboard with secure config loading
-        async function initializeDashboard() {
-            try {
-                // Check authentication first - will redirect if not authenticated
-                if (!checkAuthentication()) {
-                    return; // Stop execution if not authenticated
-                }
-                
-                // Load secure configuration
-                await loadSecureConfig();
-                
-                // Only proceed if user is authenticated and config loaded
-                loadMyLeads();
-                setupEventListeners();
-                
-                console.log('Dashboard initialized for:', currentUser.company);
-            } catch (error) {
-                console.error('Failed to initialize dashboard:', error);
-                showError('Failed to initialize dashboard. Please refresh the page.');
-            }
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            const filterForm = document.getElementById('filterForm');
-            filterForm.addEventListener('submit', handleFilterSubmit);
-
-            const noteForm = document.getElementById('noteForm');
-            noteForm.addEventListener('submit', handleNoteSubmit);
-
-            // Real-time search
-            const searchInput = document.getElementById('searchText');
-            searchInput.addEventListener('input', debounce(applyFilters, 300));
             
-            // Add logout functionality
-            const logoutBtn = document.querySelector('.logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', handleLogout);
+            updateDebug('UI updated for: ' + currentUser.companyName);
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                updateDebug('Loading dashboard data...');
+                
+                // For now, show demo data
+                // In production, this would call APIs to get real data
+                
+                // Simulate loading delay
+                showLoading();
+                
+                setTimeout(() => {
+                    hideLoading();
+                    updateDebug('✅ Dashboard data loaded (demo mode)');
+                }, 1000);
+                
+            } catch (error) {
+                updateDebug('❌ Error loading dashboard data: ' + error.message);
+                hideLoading();
             }
         }
 
-        // Handle logout
-        function handleLogout(event) {
+        // Handle logout securely
+        async function handleLogout(event) {
             event.preventDefault();
             
             if (confirm('Are you sure you want to logout?')) {
-                console.log('User logging out');
-                sessionStorage.removeItem('company_user');
-                window.location.href = 'company-signin.html';
-            }
-        }
-
-        // Load purchased leads for current authenticated company
-        async function loadMyLeads() {
-            if (!currentUser) {
-                console.error('No authenticated user found');
-                window.location.href = 'company-signin.html';
-                return;
-            }
-            
-            try {
-                showLoading();
-                console.log(`Loading purchased leads for: ${currentUser.company}`);
-
-                // Get all leads where this specific company has purchased them
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/Leads?or=(purchased_by.eq.${encodeURIComponent(currentUser.company)},exclusive_purchased_by.eq.${encodeURIComponent(currentUser.company)})&order=created_at.desc`, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const leads = await response.json();
-                console.log(`✅ Successfully loaded ${leads.length} purchased leads for ${currentUser.company}`);
-
-                // Transform leads for dashboard
-                myLeads = leads.map(lead => ({
-                    id: lead.id,
-                    firstName: lead.first_name,
-                    lastName: lead.last_name,
-                    email: lead.email,
-                    phone: lead.phone,
-                    address: lead.address,
-                    zipCode: lead.zip_code,
-                    propertyType: lead.property_type,
-                    timeline: lead.timeline,
-                    details: lead.details,
-                    photos: lead.photo_urls ? lead.photo_urls.split(' ').filter(url => url.trim()) : [],
-                    dateSubmitted: lead.created_at ? lead.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
-                    datePurchased: lead.purchased_by === currentUser.company ? 
-                        (lead.updated_at ? lead.updated_at.split('T')[0] : lead.created_at.split('T')[0]) :
-                        (lead.exclusive_purchase_date ? lead.exclusive_purchase_date.split('T')[0] : lead.created_at.split('T')[0]),
-                    purchaseType: lead.exclusive_purchased_by === currentUser.company ? 'exclusive' : 'subscription',
-                    status: 'new', // Default status - in production, store in database
-                    notes: [], // In production, load from separate notes table
-                    coordinates: { lat: 0, lng: 0 }
-                }));
-
-                filteredLeads = [...myLeads];
-                hideLoading();
-                displayLeads();
-                updateStats();
-
-            } catch (error) {
-                console.error('Error loading leads:', error);
-                hideLoading();
-                showError('Failed to load your leads. Please refresh the page.');
-            }
-        }
-
-        // Handle filter form submission
-        function handleFilterSubmit(event) {
-            event.preventDefault();
-            applyFilters();
-        }
-
-        // Apply filters to leads
-        function applyFilters() {
-            const searchText = document.getElementById('searchText').value.toLowerCase();
-            const statusFilter = document.getElementById('statusFilter').value;
-            const timelineFilter = document.getElementById('timelineFilter').value;
-            const dateFrom = document.getElementById('dateFrom').value;
-
-            filteredLeads = myLeads.filter(lead => {
-                // Text search
-                if (searchText) {
-                    const searchableText = `${lead.firstName} ${lead.lastName} ${lead.address} ${lead.details}`.toLowerCase();
-                    if (!searchableText.includes(searchText)) {
-                        return false;
-                    }
-                }
-
-                // Status filter
-                if (statusFilter && lead.status !== statusFilter) {
-                    return false;
-                }
-
-                // Timeline filter
-                if (timelineFilter && lead.timeline !== timelineFilter) {
-                    return false;
-                }
-
-                // Date filter
-                if (dateFrom && lead.datePurchased < dateFrom) {
-                    return false;
-                }
-
-                return true;
-            });
-
-            displayLeads();
-            updateStats();
-        }
-
-        // Display leads in dashboard
-        function displayLeads() {
-            const leadsGrid = document.getElementById('leadsGrid');
-            
-            if (filteredLeads.length === 0) {
-                leadsGrid.innerHTML = `
-                    <div style="text-align: center; padding: 60px; color: #6b7280;">
-                        <h3 style="margin-bottom: 10px;">No leads found</h3>
-                        <p>Try adjusting your filters or <a href="company-portal.html" style="color: #3b82f6;">browse new leads</a></p>
-                    </div>
-                `;
-                return;
-            }
-
-            leadsGrid.innerHTML = '';
-            filteredLeads.forEach(lead => {
-                const leadElement = createLeadDashboardItem(lead);
-                leadsGrid.appendChild(leadElement);
-            });
-        }
-
-        // Create lead dashboard item
-        function createLeadDashboardItem(lead) {
-            const item = document.createElement('div');
-            item.className = 'lead-item';
-
-            const statusClass = `status-${lead.status}`;
-            const statusText = lead.status.charAt(0).toUpperCase() + lead.status.slice(1);
-
-            item.innerHTML = `
-                <div class="lead-item-header">
-                    <div class="lead-basic-info">
-                        <h3>${lead.propertyType.charAt(0).toUpperCase() + lead.propertyType.slice(1)} Estate Sale</h3>
-                        <p>${lead.firstName} ${lead.lastName} • ${lead.zipCode} • ${formatDate(lead.datePurchased)}</p>
-                    </div>
-                    <div class="lead-status ${statusClass}">${statusText}</div>
-                    <div class="lead-actions">
-                        <button class="action-btn" onclick="updateLeadStatus('${lead.id}')">Update Status</button>
-                        <button class="action-btn primary" onclick="openNoteModal('${lead.id}')">Add Note</button>
-                    </div>
-                </div>
-
-                <div class="lead-details-grid">
-                    <div class="lead-contact-info">
-                        <div class="contact-item">
-                            <span class="contact-label">Email:</span>
-                            <span><a href="mailto:${lead.email}" style="color: #3b82f6;">${lead.email}</a></span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">Phone:</span>
-                            <span><a href="tel:${lead.phone}" style="color: #3b82f6;">${lead.phone}</a></span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">Address:</span>
-                            <span>${lead.address}</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">Timeline:</span>
-                            <span>${getTimelineText(lead.timeline)}</span>
-                        </div>
-                        <div class="contact-item">
-                            <span class="contact-label">Purchase Type:</span>
-                            <span>${lead.purchaseType === 'exclusive' ? 'Exclusive Access' : 'Subscription'}</span>
-                        </div>
-                    </div>
-
-                    <div class="lead-timeline-info">
-                        <div class="timeline-item">
-                            <div class="timeline-date">Lead Submitted</div>
-                            <div>${formatDate(lead.dateSubmitted)}</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">Purchased</div>
-                            <div>${formatDate(lead.datePurchased)}</div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-date">Photos</div>
-                            <div>${lead.photos.length} uploaded</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="margin: 15px 0; padding: 15px; background: #f8fafc; border-radius: 8px;">
-                    <strong>Details:</strong> ${lead.details}
-                </div>
-
-                <div class="notes-section">
-                    <div class="notes-header">
-                        <span class="notes-title">Notes (${lead.notes.length})</span>
-                        <button class="add-note-btn" onclick="openNoteModal('${lead.id}')">+ Add Note</button>
-                    </div>
-                    <div class="notes-list">
-                        ${lead.notes.length > 0 ? 
-                            lead.notes.map(note => `
-                                <div class="note-item">
-                                    ${note.content}
-                                    <div class="note-meta">${note.date} • ${note.author}</div>
-                                </div>
-                            `).join('') :
-                            '<div style="color: #6b7280; font-size: 0.8rem; font-style: italic;">No notes yet. Add a note to track your progress.</div>'
+                try {
+                    await fetch('/.netlify/functions/auth-logout', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
                         }
-                    </div>
-                </div>
-            `;
-
-            return item;
-        }
-
-        // Update lead status
-        function updateLeadStatus(leadId) {
-            const statuses = ['new', 'contacted', 'in-progress', 'completed'];
-            const lead = myLeads.find(l => l.id == leadId);
-            if (!lead) return;
-
-            const currentIndex = statuses.indexOf(lead.status);
-            const nextIndex = (currentIndex + 1) % statuses.length;
-            lead.status = statuses[nextIndex];
-
-            // In production, save to database
-            console.log(`Updated lead ${leadId} status to ${lead.status}`);
-            
-            displayLeads();
-            updateStats();
-        }
-
-        // Open note modal
-        function openNoteModal(leadId) {
-            currentNoteLeadId = leadId;
-            document.getElementById('noteText').value = '';
-            document.getElementById('noteModal').classList.add('show');
-        }
-
-        // Close note modal
-        function closeNoteModal() {
-            currentNoteLeadId = null;
-            document.getElementById('noteModal').classList.remove('show');
-        }
-
-        // Handle note submission
-        function handleNoteSubmit(event) {
-            event.preventDefault();
-            
-            const noteText = document.getElementById('noteText').value;
-            if (!noteText.trim() || !currentNoteLeadId) return;
-
-            const lead = myLeads.find(l => l.id == currentNoteLeadId);
-            if (!lead) return;
-
-            // Add note to lead
-            const newNote = {
-                content: noteText.trim(),
-                date: new Date().toLocaleDateString(),
-                author: currentUser ? currentUser.company : 'Unknown'
-            };
-
-            lead.notes.unshift(newNote);
-
-            // In production, save to database
-            console.log(`Added note to lead ${currentNoteLeadId}:`, newNote);
-
-            closeNoteModal();
-            displayLeads();
-        }
-
-        // Update dashboard stats
-        function updateStats() {
-            const totalPurchased = myLeads.length;
-            const activeLeads = myLeads.filter(l => l.status === 'contacted' || l.status === 'in-progress').length;
-            const completedLeads = myLeads.filter(l => l.status === 'completed').length;
-            const conversionRate = totalPurchased > 0 ? Math.round((completedLeads / totalPurchased) * 100) : 0;
-            const totalSpent = myLeads.length * 24.99; // Simple calculation
-
-            document.getElementById('totalPurchased').textContent = totalPurchased;
-            document.getElementById('activeLeads').textContent = activeLeads;
-            document.getElementById('completedLeads').textContent = completedLeads;
-            document.getElementById('conversionRate').textContent = `${conversionRate}%`;
-            document.getElementById('totalSpent').textContent = `$${totalSpent.toFixed(2)}`;
-        }
-
-        // Export leads to CSV
-        function exportLeads() {
-            if (filteredLeads.length === 0) {
-                alert('No leads to export');
-                return;
+                    });
+                } catch (error) {
+                    console.error('Logout API call failed:', error);
+                }
+                
+                localStorage.removeItem('auth_token');
+                localStorage.removeItem('company_user');
+                window.location.href = 'company-signin.html';
             }
-
-            const headers = ['Name', 'Email', 'Phone', 'Address', 'Property Type', 'Timeline', 'Status', 'Purchase Date', 'Purchase Type', 'Details'];
-            
-            const csvContent = [
-                headers.join(','),
-                ...filteredLeads.map(lead => [
-                    `"${lead.firstName} ${lead.lastName}"`,
-                    `"${lead.email}"`,
-                    `"${lead.phone}"`,
-                    `"${lead.address}"`,
-                    `"${lead.propertyType}"`,
-                    `"${getTimelineText(lead.timeline)}"`,
-                    `"${lead.status}"`,
-                    `"${lead.datePurchased}"`,
-                    `"${lead.purchaseType}"`,
-                    `"${lead.details.replace(/"/g, '""')}"`
-                ].join(','))
-            ].join('\n');
-
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `estate-sale-leads-${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-            
-            URL.revokeObjectURL(url);
         }
 
-        // Show error message
-        function showError(message) {
-            const leadsGrid = document.getElementById('leadsGrid');
-            leadsGrid.innerHTML = `
-                <div style="text-align: center; padding: 60px; color: #ef4444;">
-                    <h3>Error Loading Leads</h3>
-                    <p>${message}</p>
-                    <button onclick="loadMyLeads()" style="margin-top: 20px; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer;">
-                        Retry
-                    </button>
-                </div>
-            `;
+        // Show upcoming features
+        function showUpcomingFeatures() {
+            const featuresPreview = document.getElementById('featuresPreview');
+            if (featuresPreview.style.display === 'none') {
+                featuresPreview.style.display = 'block';
+                featuresPreview.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                featuresPreview.style.display = 'none';
+            }
         }
 
         // Utility functions
         function showLoading() {
             document.getElementById('loadingState').style.display = 'block';
-            document.getElementById('leadsGrid').style.display = 'none';
+            document.getElementById('statsGrid').style.opacity = '0.5';
         }
 
         function hideLoading() {
             document.getElementById('loadingState').style.display = 'none';
-            document.getElementById('leadsGrid').style.display = 'block';
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-
-        function getTimelineText(timeline) {
-            const timelineMap = {
-                'asap': 'ASAP (2 weeks)',
-                'month': 'Within a month',
-                '1-3months': '1-3 months',
-                'flexible': 'Flexible timing',
-                'planning': 'Planning ahead'
-            };
-            return timelineMap[timeline] || timeline;
-        }
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
+            document.getElementById('statsGrid').style.opacity = '1';
         }
 
         // Make functions globally available
-        window.openNoteModal = openNoteModal;
-        window.closeNoteModal = closeNoteModal;
-        window.updateLeadStatus = updateLeadStatus;
-        window.exportLeads = exportLeads;
+        window.handleLogout = handleLogout;
+        window.showUpcomingFeatures = showUpcomingFeatures;
     </script>
 </body>
 </html>
