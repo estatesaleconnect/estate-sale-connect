@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Estate Sale Connect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .verification-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid rgba(30, 64, 175, 0.1);
+        }
+
+        .loading-state {
+            display: block;
+        }
+
+        .success-state {
+            display: none;
+        }
+
+        .error-state {
+            display: none;
+        }
+
+        .verification-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3rem;
+        }
+
+        .loading-icon {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            animation: pulse 2s infinite;
+        }
+
+        .success-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .error-icon {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .verification-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .loading-title {
+            color: #1e40af;
+        }
+
+        .success-title {
+            color: #065f46;
+        }
+
+        .error-title {
+            color: #dc2626;
+        }
+
+        .verification-message {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .verification-details {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .verification-details h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .verification-details ul {
+            color: #374151;
+            padding-left: 20px;
+            line-height: 1.7;
+        }
+
+        .verification-details li {
+            margin-bottom: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+        }
+
+        .support-info {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .support-info a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .support-info a:hover {
+            text-decoration: underline;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .verification-card {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .verification-title {
+                font-size: 2rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="verification-card">
+            <!-- Loading State -->
+            <div class="loading-state" id="loadingState">
+                <div class="verification-icon loading-icon">
+                    <div class="loading-spinner"></div>
+                </div>
+                <h1 class="verification-title loading-title">Verifying Your Email...</h1>
+                <p class="verification-message">
+                    Please wait while we verify your email address and activate your account.
+                </p>
+            </div>
+
+            <!-- Success State -->
+            <div class="success-state" id="successState">
+                <div class="verification-icon success-icon">
+                    ✅
+                </div>
+                <h1 class="verification-title success-title">Email Verified Successfully!</h1>
+                <p class="verification-message">
+                    Great news! Your email has been verified and your account is now active.
+                </p>
+
+                <div class="verification-details">
+                    <h3>🎉 Your Account Status</h3>
+                    <ul>
+                        <li><strong>Email Verification:</strong> ✅ Complete</li>
+                        <li><strong>Business Verification:</strong> ⏳ In Progress (1-2 business days)</li>
+                        <li><strong>Lead Access:</strong> 🎯 Available after business verification</li>
+                        <li><strong>Free Trial:</strong> 🎁 7 days starting after approval</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="company-signin.html" class="btn btn-primary">
+                        🔐 Sign In to Your Account
+                    </a>
+                    <a href="company-dashboard.html" class="btn btn-secondary">
+                        📊 View Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-state" id="errorState">
+                <div class="verification-icon error-icon">
+                    ❌
+                </div>
+                <h1 class="verification-title error-title">Verification Failed</h1>
+                <p class="verification-message" id="errorMessage">
+                    We couldn't verify your email address. This may happen if the link has expired or has already been used.
+                </p>
+
+                <div class="verification-details">
+                    <h3>⚠️ Common Issues</h3>
+                    <ul>
+                        <li>Verification link has expired (24-hour limit)</li>
+                        <li>Link has already been used</li>
+                        <li>Invalid or corrupted verification token</li>
+                        <li>Account may have already been verified</li>
+                    </ul>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="#" onclick="requestNewVerification()" class="btn btn-primary">
+                        📧 Request New Verification Email
+                    </a>
+                    <a href="company-signin.html" class="btn btn-secondary">
+                        🔐 Try Signing In
+                    </a>
+                </div>
+            </div>
+
+            <div class="support-info">
+                <p>
+                    Having trouble? Contact our support team at 
+                    <a href="mailto:info@estatesaleconnect.com">info@estatesaleconnect.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let verificationToken = null;
+
+        // Initialize verification process
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get token from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            verificationToken = urlParams.get('token');
+
+            if (!verificationToken) {
+                showError('No verification token found in the URL. Please check your email and click the correct verification link.');
+                return;
+            }
+
+            // Start verification process
+            verifyEmail(verificationToken);
+        });
+
+        // Verify email with backend
+        async function verifyEmail(token) {
+            try {
+                console.log('Starting email verification...');
+
+                const response = await fetch('/.netlify/functions/verify-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ token: token })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    console.log('Email verification successful');
+                    showSuccess(result);
+                } else {
+                    console.log('Email verification failed:', result.error);
+                    showError(result.error || 'Email verification failed');
+                }
+
+            } catch (error) {
+                console.error('Verification error:', error);
+                showError('Network error occurred during verification. Please check your connection and try again.');
+            }
+        }
+
+        // Show success state
+        function showSuccess(result) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+
+            // If user data is available, customize the message
+            if (result.company) {
+                const welcomeMessage = document.querySelector('#successState .verification-message');
+                welcomeMessage.innerHTML = `
+                    Welcome to Estate Sale Connect, ${result.company.company_name}! 
+                    Your email has been verified and your account is now active.
+                `;
+            }
+        }
+
+        // Show error state
+        function showError(errorMessage) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+
+            const errorMessageElement = document.getElementById('errorMessage');
+            errorMessageElement.textContent = errorMessage;
+        }
+
+        // Request new verification email
+        async function requestNewVerification() {
+            const email = prompt('Please enter your email address to receive a new verification link:');
+            
+            if (!email) {
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/.netlify/functions/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    alert('New verification email sent! Please check your inbox and spam folder.');
+                } else {
+                    alert('Failed to send verification email: ' + (result.error || 'Unknown error'));
+                }
+
+            } catch (error) {
+                console.error('Resend verification error:', error);
+                alert('Network error occurred. Please try again later.');
+            }
+        }
+
+        // Make function globally available
+        window.requestNewVerification = requestNewVerification;
+    </script>
+</body>
+</html>
