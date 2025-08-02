@@ -103,6 +103,26 @@
             border-color: #1a1a1a;
         }
 
+        /* New Company Signup Button */
+        .company-signup-btn {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%) !important;
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(30, 64, 175, 0.2);
+            border: 1px solid transparent;
+        }
+
+        .company-signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
+            color: white !important;
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #8b5a2b 0%, #a0522d 30%, #cd853f  60%, #daa520 100%);
@@ -213,6 +233,94 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.3);
             background: #ffffff;
             border-color: rgba(139, 90, 43, 0.5);
+        }
+
+        /* Professional CTA Section - New */
+        .professional-cta {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .professional-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="professional" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="15" cy="15" r="0.8" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23professional)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .professional-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .professional-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .professional-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .professional-cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .professional-signup-btn {
+            background: white;
+            color: #1e40af;
+            padding: 18px 36px;
+            border: 2px solid white;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .professional-signup-btn:hover {
+            background: transparent;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .professional-login-btn {
+            background: transparent;
+            color: white;
+            padding: 18px 36px;
+            border: 2px solid rgba(255,255,255,0.5);
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .professional-login-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+            color: white;
         }
 
         /* Lead Form Section */
@@ -583,6 +691,10 @@
             .steps {
                 grid-template-columns: 1fr;
             }
+
+            .professional-cta-buttons {
+                flex-direction: column;
+            }
         }
 
         /* Ensure nav links are always visible and horizontal */
@@ -666,6 +778,29 @@
                         <div class="trust-icon">🛡️</div>
                         <span>100% Free Service</span>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional CTA Section - NEW -->
+    <section class="professional-cta">
+        <div class="container">
+            <div class="professional-content">
+                <h2>Are You an Estate Sale Professional?</h2>
+                <p>Join our network of trusted estate sale companies and connect with families who need your expertise. Access verified leads in your service area and grow your business with quality opportunities.</p>
+                
+                <div class="professional-cta-buttons">
+                    <a href="company-signup.html" class="professional-signup-btn">
+                        🚀 Join Our Network
+                    </a>
+                    <a href="company-signin.html" class="professional-login-btn">
+                        🔐 Company Login
+                    </a>
+                </div>
+
+                <div style="margin-top: 30px; opacity: 0.8;">
+                    <p style="font-size: 0.9rem;">Join 500+ estate sale professionals already using our platform</p>
                 </div>
             </div>
         </div>
@@ -870,485 +1005,4 @@
                     <h3>For Families</h3>
                     <a href="#lead-form">Get Free Quotes</a>
                     <a href="#how-it-works">How It Works</a>
-                    <a href="mailto:info@estatesaleconnect.com">Contact Support</a>
-                </div>
-                <div class="footer-section">
-                    <h3>For Companies</h3>
-                    <a href="company-signin.html">Company Login</a>
-                    <a href="mailto:info@estatesaleconnect.com">Get Access</a>
-                    <a href="mailto:info@estatesaleconnect.com">Support</a>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #374151;">
-                <p>&copy; 2024 Estate Sale Connect. All rights reserved. | <a href="mailto:info@estatesaleconnect.com" style="color: #3b82f6;">Contact Us</a></p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Global variables
-        let uploadedPhotos = [];
-        let cloudinaryWidget = null;
-
-        // Constants for validation
-        const MAX_PHOTOS = 12;
-        const MAX_NAME_LENGTH = 50;
-        const MAX_ADDRESS_LENGTH = 200;
-        const MAX_DETAILS_LENGTH = 2000;
-        const MIN_DETAILS_LENGTH = 10;
-
-        // Input sanitization function
-        function sanitizeInput(input) {
-            if (typeof input !== 'string') return '';
-            
-            // Remove potential XSS vectors and HTML tags
-            return input
-                .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-                .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-                .replace(/javascript:/gi, '')
-                .replace(/on\w+\s*=/gi, '')
-                .replace(/<[^>]*>/g, '')
-                .trim();
-        }
-
-        // Email validation
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email) && email.length <= 254;
-        }
-
-        // Phone validation
-        function isValidPhone(phone) {
-            const cleaned = phone.replace(/[^0-9+\-() ]/g, '');
-            return cleaned.length >= 10 && cleaned.length <= 20;
-        }
-
-        // Real-time validation functions
-        function validateField(field) {
-            const formGroup = field.closest('.form-group');
-            const errorElement = formGroup.querySelector('.form-error');
-            let isValid = true;
-            let errorMessage = '';
-
-            // Remove previous error state
-            formGroup.classList.remove('error');
-
-            const value = sanitizeInput(field.value);
-            
-            switch (field.name) {
-                case 'firstName':
-                case 'lastName':
-                    if (!value || value.length < 1) {
-                        errorMessage = 'This field is required';
-                        isValid = false;
-                    } else if (value.length > MAX_NAME_LENGTH) {
-                        errorMessage = `Maximum ${MAX_NAME_LENGTH} characters allowed`;
-                        isValid = false;
-                    }
-                    break;
-
-                case 'email':
-                    if (!value) {
-                        errorMessage = 'Email is required';
-                        isValid = false;
-                    } else if (!isValidEmail(value)) {
-                        errorMessage = 'Please enter a valid email address';
-                        isValid = false;
-                    }
-                    break;
-
-                case 'phone':
-                    if (!value) {
-                        errorMessage = 'Phone number is required';
-                        isValid = false;
-                    } else if (!isValidPhone(value)) {
-                        errorMessage = 'Please enter a valid phone number';
-                        isValid = false;
-                    }
-                    break;
-
-                case 'address':
-                    if (!value) {
-                        errorMessage = 'Address is required';
-                        isValid = false;
-                    } else if (value.length < 10) {
-                        errorMessage = 'Please enter a complete address';
-                        isValid = false;
-                    } else if (value.length > MAX_ADDRESS_LENGTH) {
-                        errorMessage = `Maximum ${MAX_ADDRESS_LENGTH} characters allowed`;
-                        isValid = false;
-                    }
-                    break;
-
-                case 'propertyType':
-                    if (!value) {
-                        errorMessage = 'Please select a property type';
-                        isValid = false;
-                    }
-                    break;
-
-                case 'timeline':
-                    if (!value) {
-                        errorMessage = 'Please select a timeline';
-                        isValid = false;
-                    }
-                    break;
-
-                case 'details':
-                    if (!value) {
-                        errorMessage = 'Details are required';
-                        isValid = false;
-                    } else if (value.length < MIN_DETAILS_LENGTH) {
-                        errorMessage = `Please provide at least ${MIN_DETAILS_LENGTH} characters`;
-                        isValid = false;
-                    } else if (value.length > MAX_DETAILS_LENGTH) {
-                        errorMessage = `Maximum ${MAX_DETAILS_LENGTH} characters allowed`;
-                        isValid = false;
-                    }
-                    break;
-            }
-
-            if (!isValid) {
-                formGroup.classList.add('error');
-                errorElement.textContent = errorMessage;
-            }
-
-            return isValid;
-        }
-
-        // Wait for page to load
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Page loaded, initializing secure form...');
-            
-            // Initialize form submission handler
-            const form = document.getElementById('leadForm');
-            if (form) {
-                form.addEventListener('submit', handleFormSubmission);
-                
-                // Add real-time validation to all inputs
-                const inputs = form.querySelectorAll('input, select, textarea');
-                inputs.forEach(input => {
-                    input.addEventListener('blur', () => validateField(input));
-                    input.addEventListener('input', debounce(() => validateField(input), 300));
-                });
-            }
-        });
-
-        // Debounce function for real-time validation
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Cloudinary upload function
-        function openPhotoUpload() {
-            console.log('Opening Cloudinary upload...');
-            
-            if (uploadedPhotos.length >= MAX_PHOTOS) {
-                alert(`Maximum ${MAX_PHOTOS} photos allowed`);
-                return;
-            }
-            
-            // Check if Cloudinary is loaded
-            if (typeof cloudinary === 'undefined') {
-                alert('Photo upload service is still loading. Please wait a moment and try again.');
-                return;
-            }
-
-            // Create widget if it doesn't exist
-            if (!cloudinaryWidget) {
-                try {
-                    cloudinaryWidget = cloudinary.createUploadWidget({
-                        cloudName: 'dfy6vlrtn',
-                        uploadPreset: 'estate_photos_unsigned',
-                        multiple: true,
-                        maxFiles: MAX_PHOTOS - uploadedPhotos.length,
-                        sources: ['local'],
-                        resourceType: 'image',
-                        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-                        maxFileSize: 10000000, // 10MB
-                        maxImageWidth: 2000,
-                        maxImageHeight: 2000
-                    }, function(error, result) {
-                        handleCloudinaryResult(error, result);
-                    });
-                } catch (error) {
-                    console.error('Error creating Cloudinary widget:', error);
-                    alert('Photo upload temporarily unavailable. Using backup upload method.');
-                    document.getElementById('photoInput').click();
-                    return;
-                }
-            }
-
-            cloudinaryWidget.open();
-        }
-
-        // Handle Cloudinary upload results
-        function handleCloudinaryResult(error, result) {
-            if (error) {
-                console.error('Upload error:', error);
-                alert('Upload failed: ' + error.message);
-                return;
-            }
-
-            if (result && result.event === "success") {
-                console.log('Photo uploaded successfully!');
-                
-                // Validate URL is from Cloudinary
-                if (!result.info.secure_url.startsWith('https://res.cloudinary.com/')) {
-                    console.error('Invalid upload URL');
-                    return;
-                }
-                
-                const photoData = {
-                    url: result.info.secure_url,
-                    publicId: result.info.public_id,
-                    fileName: sanitizeInput(result.info.original_filename) || 'uploaded_image'
-                };
-                
-                if (uploadedPhotos.length < MAX_PHOTOS) {
-                    uploadedPhotos.push(photoData);
-                    addPhotoPreview(photoData);
-                    updatePhotoUrlsField();
-                }
-            }
-        }
-
-        // Handle local file selection (fallback)
-        function handlePhotoSelection(input) {
-            console.log('Handling local file selection...');
-            
-            if (!input.files || input.files.length === 0) {
-                return;
-            }
-
-            const files = Array.from(input.files);
-            const remainingSlots = MAX_PHOTOS - uploadedPhotos.length;
-            
-            if (files.length > remainingSlots) {
-                alert(`Only ${remainingSlots} more photos can be added`);
-                files.splice(remainingSlots);
-            }
-
-            files.forEach((file, index) => {
-                if (!file.type.startsWith('image/')) {
-                    console.warn('Skipping non-image file:', file.name);
-                    return;
-                }
-
-                // Validate file size (10MB max)
-                if (file.size > 10000000) {
-                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const photoData = {
-                        url: e.target.result,
-                        publicId: 'local_' + Date.now() + '_' + index,
-                        fileName: sanitizeInput(file.name),
-                        isLocal: true
-                    };
-                    
-                    uploadedPhotos.push(photoData);
-                    addPhotoPreview(photoData);
-                    updatePhotoUrlsField();
-                };
-                
-                reader.onerror = function(e) {
-                    console.error('Error reading file:', file.name, e);
-                };
-                
-                reader.readAsDataURL(file);
-            });
-        }
-
-        // Add photo preview to UI
-        function addPhotoPreview(photoData) {
-            const previewContainer = document.getElementById('photoPreview');
-            if (!previewContainer) {
-                console.error('Preview container not found');
-                return;
-            }
-
-            const photoElement = document.createElement('div');
-            photoElement.className = 'photo-preview-item';
-            
-            // Sanitize file name for display
-            const safeFileName = escapeHtml(photoData.fileName);
-            
-            photoElement.innerHTML = `
-                <img src="${photoData.url}" alt="${safeFileName}" loading="lazy">
-                <button type="button" class="photo-remove" onclick="removePhotoPreview('${photoData.publicId}', this)" title="Remove photo">×</button>
-            `;
-
-            previewContainer.appendChild(photoElement);
-            console.log('Photo preview added:', photoData.fileName);
-        }
-
-        // Remove photo preview
-        function removePhotoPreview(publicId, buttonElement) {
-            console.log('Removing photo:', publicId);
-            
-            // Remove from array
-            uploadedPhotos = uploadedPhotos.filter(photo => photo.publicId !== publicId);
-            
-            // Remove from UI
-            buttonElement.parentElement.remove();
-            
-            // Update hidden field
-            updatePhotoUrlsField();
-        }
-
-        // Update photo URLs for form submission
-        function updatePhotoUrlsField() {
-            // Filter to only include valid Cloudinary URLs for security
-            const validUrls = uploadedPhotos
-                .filter(photo => 
-                    photo.url.startsWith('https://res.cloudinary.com/') || 
-                    photo.url.startsWith('data:image/')
-                )
-                .map(photo => photo.url)
-                .join(' ');
-            
-            console.log('Updated photo data - Count:', uploadedPhotos.length);
-        }
-
-        // Secure form submission
-        async function handleFormSubmission(event) {
-            event.preventDefault();
-            console.log('Secure form submission started...');
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            
-            // Hide previous messages
-            document.getElementById('success-message').style.display = 'none';
-            document.getElementById('error-message').style.display = 'none';
-            
-            // Validate all fields
-            const form = event.target;
-            const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
-            let isFormValid = true;
-            
-            inputs.forEach(input => {
-                if (!validateField(input)) {
-                    isFormValid = false;
-                }
-            });
-            
-            if (!isFormValid) {
-                document.getElementById('error-message').style.display = 'block';
-                document.getElementById('error-message').scrollIntoView({ behavior: 'smooth' });
-                return;
-            }
-            
-            // Show loading state
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
-            
-            // Prepare sanitized data
-            const formData = {
-                firstName: sanitizeInput(document.getElementById('firstName').value),
-                lastName: sanitizeInput(document.getElementById('lastName').value),
-                email: sanitizeInput(document.getElementById('email').value.toLowerCase()),
-                phone: sanitizeInput(document.getElementById('phone').value),
-                address: sanitizeInput(document.getElementById('address').value),
-                propertyType: document.getElementById('propertyType').value,
-                timeline: document.getElementById('timeline').value,
-                details: sanitizeInput(document.getElementById('details').value),
-                'photo-urls': uploadedPhotos
-                    .filter(photo => 
-                        photo.url.startsWith('https://res.cloudinary.com/') || 
-                        photo.url.startsWith('data:image/')
-                    )
-                    .map(photo => photo.url)
-                    .join(' ')
-            };
-            
-            try {
-                // Submit to secure validation endpoint
-                const response = await fetch('/.netlify/functions/validate-lead-data', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.success) {
-                    // Show success message
-                    document.getElementById('success-message').style.display = 'block';
-                    
-                    // Reset form
-                    event.target.reset();
-                    uploadedPhotos = [];
-                    document.getElementById('photoPreview').innerHTML = '';
-                    
-                    // Remove all error states
-                    document.querySelectorAll('.form-group.error').forEach(group => {
-                        group.classList.remove('error');
-                    });
-                    
-                    // Scroll to success message
-                    document.getElementById('success-message').scrollIntoView({ 
-                        behavior: 'smooth' 
-                    });
-                } else {
-                    throw new Error(result.error || 'Validation failed');
-                }
-            } catch (error) {
-                console.error('Form submission error:', error);
-                document.getElementById('error-message').textContent = 'There was an error submitting your form. Please try again.';
-                document.getElementById('error-message').style.display = 'block';
-                document.getElementById('error-message').scrollIntoView({ behavior: 'smooth' });
-            } finally {
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            }
-        }
-
-        // HTML escaping function
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-        }
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Make functions globally available for onclick handlers
-        window.removePhotoPreview = removePhotoPreview;
-        window.openPhotoUpload = openPhotoUpload;
-        window.handlePhotoSelection = handlePhotoSelection;
-    </script>
-</body>
-</html>
+                    <a href="mailto
