@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Our Network - Estate Sale Connect</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.netlify.app https://*.netlify.com">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #1e40af;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .back-link {
+            color: #6b6b6b;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: #1e40af;
+        }
+
+        /* Main Content */
+        .signup-container {
+            display: flex;
+            min-height: calc(100vh - 100px);
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .signup-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1000px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .signup-info {
+            padding: 40px;
+        }
+
+        .signup-info h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #1e40af;
+            margin-bottom: 20px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .signup-info p {
+            font-size: 1.1rem;
+            color: #4b5563;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .benefits-list {
+            list-style: none;
+            margin: 30px 0;
+        }
+
+        .benefits-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .benefits-list li::before {
+            content: '✓';
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .trust-indicators {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-top: 30px;
+        }
+
+        .trust-indicators h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .trust-indicators p {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        /* Signup Form */
+        .signup-form-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(30, 64, 175, 0.1);
+            border: 1px solid rgba(30, 64, 175, 0.1);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .form-header p {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .progress-step.active {
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        .progress-step.completed {
+            color: #10b981;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            color: #9ca3af;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .progress-step.active .step-number {
+            background: #1e40af;
+            color: white;
+        }
+
+        .progress-step.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .form-error {
+            color: #ef4444;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .form-group.error .form-error {
+            display: block;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            transform: scale(1.2);
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            font-weight: 400;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .checkbox-group a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            flex: 1;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+            border-color: #d1d5db;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .message.error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #bbf7d0;
+        }
+
+        .message.warning {
+            background: #fffbeb;
+            color: #d97706;
+            border: 1px solid #fed7aa;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .signup-wrapper {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .signup-info {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .signup-info h1 {
+                font-size: 2.2rem;
+            }
+
+            .signup-form-container {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .progress-indicator {
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="index.html" class="logo">ESTATE SALE CONNECT</a>
+            <a href="company-signin.html" class="back-link">
+                ← Already have an account? Sign In
+            </a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="signup-container">
+        <div class="container">
+            <div class="signup-wrapper">
+                <!-- Left Side - Information -->
+                <div class="signup-info">
+                    <h1>Join Our Network of Trusted Estate Sale Professionals</h1>
+                    <p>Connect with families in need and grow your business with verified, high-quality leads in your service area.</p>
+                    
+                    <ul class="benefits-list">
+                        <li>Access to exclusive estate sale leads</li>
+                        <li>24-hour exclusive purchase windows</li>
+                        <li>Verified family contacts and property details</li>
+                        <li>Geographic targeting in your service areas</li>
+                        <li>Professional dashboard and analytics</li>
+                        <li>No long-term contracts or setup fees</li>
+                    </ul>
+
+                    <div class="trust-indicators">
+                        <h3>🏆 Join 500+ Estate Sale Professionals</h3>
+                        <p>Our network includes licensed, insured, and verified estate sale companies across the United States. We maintain high standards to protect both families and professionals.</p>
+                    </div>
+                </div>
+
+                <!-- Right Side - Signup Form -->
+                <div class="signup-form-container">
+                    <div class="form-header">
+                        <h2>Create Your Account</h2>
+                        <p>Get started in just a few minutes</p>
+                    </div>
+
+                    <!-- Progress Indicator -->
+                    <div class="progress-indicator">
+                        <div class="progress-step active" data-step="1">
+                            <span class="step-number">1</span>
+                            <span>Company Info</span>
+                        </div>
+                        <div class="progress-step" data-step="2">
+                            <span class="step-number">2</span>
+                            <span>Business Details</span>
+                        </div>
+                        <div class="progress-step" data-step="3">
+                            <span class="step-number">3</span>
+                            <span>Verification</span>
+                        </div>
+                    </div>
+
+                    <!-- Message Container -->
+                    <div id="messageContainer"></div>
+
+                    <!-- Signup Form -->
+                    <form id="signupForm">
+                        <!-- Step 1: Company Information -->
+                        <div class="form-step active" data-step="1">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name <span class="required">*</span></label>
+                                    <input type="text" id="firstName" name="firstName" required maxlength="50" autocomplete="given-name">
+                                    <div class="form-error">Please enter a valid first name</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name <span class="required">*</span></label>
+                                    <input type="text" id="lastName" name="lastName" required maxlength="50" autocomplete="family-name">
+                                    <div class="form-error">Please enter a valid last name</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="companyName">Company Name <span class="required">*</span></label>
+                                <input type="text" id="companyName" name="companyName" required maxlength="100" autocomplete="organization">
+                                <div class="form-help">Legal business name as it appears on your license</div>
+                                <div class="form-error">Please enter your company name</div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="email">Business Email <span class="required">*</span></label>
+                                    <input type="email" id="email" name="email" required maxlength="254" autocomplete="email">
+                                    <div class="form-error">Please enter a valid business email</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Business Phone <span class="required">*</span></label>
+                                    <input type="tel" id="phone" name="phone" required maxlength="20" autocomplete="tel">
+                                    <div class="form-error">Please enter a valid phone number</div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="password">Password <span class="required">*</span></label>
+                                    <input type="password" id="password" name="password" required minlength="8" maxlength="128" autocomplete="new-password">
+                                    <div class="form-help">Minimum 8 characters with uppercase, lowercase, and number</div>
+                                    <div class="form-error">Password must be at least 8 characters</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required maxlength="128" autocomplete="new-password">
+                                    <div class="form-error">Passwords do not match</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Business Details -->
+                        <div class="form-step" data-step="2">
+                            <div class="form-group">
+                                <label for="businessAddress">Business Address <span class="required">*</span></label>
+                                <input type="text" id="businessAddress" name="businessAddress" required maxlength="200" autocomplete="street-address" placeholder="Street, City, State, ZIP">
+                                <div class="form-error">Please enter your complete business address</div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="businessType">Business Type <span class="required">*</span></label>
+                                    <select id="businessType" name="businessType" required>
+                                        <option value="">Select business type</option>
+                                        <option value="estate_sale_company">Estate Sale Company</option>
+                                        <option value="auction_house">Auction House</option>
+                                        <option value="liquidation_service">Liquidation Service</option>
+                                        <option value="antique_dealer">Antique Dealer</option>
+                                        <option value="consignment_shop">Consignment Shop</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                    <div class="form-error">Please select your business type</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="yearsInBusiness">Years in Business <span class="required">*</span></label>
+                                    <select id="yearsInBusiness" name="yearsInBusiness" required>
+                                        <option value="">Select years</option>
+                                        <option value="0-1">Less than 1 year</option>
+                                        <option value="1-3">1-3 years</option>
+                                        <option value="3-5">3-5 years</option>
+                                        <option value="5-10">5-10 years</option>
+                                        <option value="10+">10+ years</option>
+                                    </select>
+                                    <div class="form-error">Please select years in business</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="serviceAreas">Primary Service Areas <span class="required">*</span></label>
+                                <textarea id="serviceAreas" name="serviceAreas" rows="3" required maxlength="500" placeholder="List cities, counties, or ZIP codes you serve (e.g., Charlotte, Mecklenburg County, 28202, 28203...)"></textarea>
+                                <div class="form-help">This helps us match you with relevant leads in your area</div>
+                                <div class="form-error">Please enter your service areas</div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="licenseNumber">Business License # (Optional)</label>
+                                    <input type="text" id="licenseNumber" name="licenseNumber" maxlength="50">
+                                    <div class="form-help">Helps with verification and trust</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="insuranceCarrier">Insurance Carrier (Optional)</label>
+                                    <input type="text" id="insuranceCarrier" name="insuranceCarrier" maxlength="100">
+                                    <div class="form-help">Builds client confidence</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="websiteUrl">Company Website (Optional)</label>
+                                <input type="url" id="websiteUrl" name="websiteUrl" maxlength="200" placeholder="https://yourcompany.com">
+                                <div class="form-help">Include https:// for best results</div>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Verification & Agreement -->
+                        <div class="form-step" data-step="3">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <h3 style="color: #1e40af; margin-bottom: 15px;">Almost Done!</h3>
+                                <p style="color: #6b7280;">Please review and agree to our terms to complete your registration.</p>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="termsAgreement" name="termsAgreement" required>
+                                <label for="termsAgreement">
+                                    I agree to the <a href="#" onclick="openTerms()">Terms of Service</a> and <a href="#" onclick="openPrivacy()">Privacy Policy</a> <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="backgroundCheck" name="backgroundCheck" required>
+                                <label for="backgroundCheck">
+                                    I consent to background verification checks and understand that approval is required before accessing leads <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="communicationConsent" name="communicationConsent">
+                                <label for="communicationConsent">
+                                    I agree to receive email communications about new leads, platform updates, and marketing offers
+                                </label>
+                            </div>
+
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="professionalConduct" name="professionalConduct" required>
+                                <label for="professionalConduct">
+                                    I commit to maintaining professional standards and treating all families with respect and compassion <span class="required">*</span>
+                                </label>
+                            </div>
+
+                            <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin: 20px 0; border: 1px solid #e5e7eb;">
+                                <h4 style="color: #1e40af; margin-bottom: 10px;">What happens next?</h4>
+                                <ol style="color: #4b5563; font-size: 0.9rem; line-height: 1.6; padding-left: 20px;">
+                                    <li>You'll receive a confirmation email within minutes</li>
+                                    <li>Our team will verify your business information (1-2 business days)</li>
+                                    <li>Once approved, you'll get full access to browse and purchase leads</li>
+                                    <li>Start with a 7-day free trial - no credit card required</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <!-- Form Buttons -->
+                        <div class="form-buttons">
+                            <button type="button" class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">
+                                Previous
+                            </button>
+                            <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                                Continue
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn" style="display: none;">
+                                <span id="submitText">Create Account</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentStep = 1;
+        const totalSteps = 3;
+        
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFormValidation();
+            updateStepDisplay();
+        });
+
+        // Step navigation functions
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < totalSteps) {
+                    currentStep++;
+                    updateStepDisplay();
+                }
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        function updateStepDisplay() {
+            // Update progress indicator
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                } else if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            // Update form steps
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+
+            // Update buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+            
+            if (currentStep < totalSteps) {
+                nextBtn.style.display = 'block';
+                submitBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'block';
+            }
+        }
+
+        // Form validation
+        function setupFormValidation() {
+            const form = document.getElementById('signupForm');
+            const inputs = form.querySelectorAll('input, select, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => validateField(input));
+                input.addEventListener('input', debounce(() => validateField(input), 300));
+            });
+
+            form.addEventListener('submit', handleFormSubmit);
+        }
+
+        function validateField(field) {
+            const formGroup = field.closest('.form-group');
+            formGroup.classList.remove('error');
+
+            let isValid = true;
+            const value = field.value.trim();
+
+            switch (field.name) {
+                case 'firstName':
+                case 'lastName':
+                    isValid = value.length >= 2 && value.length <= 50;
+                    break;
+                case 'companyName':
+                    isValid = value.length >= 2 && value.length <= 100;
+                    break;
+                case 'email':
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    isValid = emailRegex.test(value) && value.length <= 254;
+                    break;
+                case 'phone':
+                    const phoneRegex = /^[\+]?[1-9][\d\-\s\(\)]{8,}$/;
+                    isValid = phoneRegex.test(value.replace(/\s/g, ''));
+                    break;
+                case 'password':
+                    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+                    isValid = passwordRegex.test(value);
+                    break;
+                case 'confirmPassword':
+                    const password = document.getElementById('password').value;
+                    isValid = value === password;
+                    break;
+                case 'businessAddress':
+                    isValid = value.length >= 10 && value.length <= 200;
+                    break;
+                case 'businessType':
+                case 'yearsInBusiness':
+                    isValid = value !== '';
+                    break;
+                case 'serviceAreas':
+                    isValid = value.length >= 5 && value.length <= 500;
+                    break;
+                case 'websiteUrl':
+                    if (value) {
+                        const urlRegex = /^https?:\/\/.+\..+$/;
+                        isValid = urlRegex.test(value);
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                formGroup.classList.add('error');
+            }
+
+            return isValid;
+        }
+
+        function validateCurrentStep() {
+            const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+            const requiredFields = currentStepElement.querySelectorAll('input[required], select[required], textarea[required]');
+            const checkboxes = currentStepElement.querySelectorAll('input[type="checkbox"][required]');
+            
+            let isValid = true;
+
+            // Validate required fields
+            requiredFields.forEach(field => {
+                if (!validateField(field)) {
+                    isValid = false;
+                }
+            });
+
+            // Validate required checkboxes
+            checkboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    showMessage('Please accept all required terms to continue.', 'error');
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        // Form submission
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            if (!validateCurrentStep()) {
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const submitText = document.getElementById('submitText');
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.innerHTML = '<span class="loading"></span>Creating Account...';
+
+            try {
+                const formData = collectFormData();
+                
+                const response = await fetch('/.netlify/functions/company-signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    showMessage('Account created successfully! Please check your email for verification instructions.', 'success');
+                    
+                    // Redirect to success page after delay
+                    setTimeout(() => {
+                        window.location.href = 'company-signup-success.html?email=' + encodeURIComponent(formData.email);
+                    }, 2000);
+                } else {
+                    throw new Error(result.error || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMessage('Registration failed: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = 'Create Account';
+            }
+        }
+
+        function collectFormData() {
+            const form = document.getElementById('signupForm');
+            const formData = new FormData(form);
+            const data = {};
+
+            for (let [key, value] = formData.entries()) {
+                if (form.elements[key].type === 'checkbox') {
+                    data[key] = form.elements[key].checked;
+                } else {
+                    data[key] = value.trim();
+                }
+            }
+
+            return data;
+        }
+
+        // Utility functions
+        function showMessage(text, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            message.style.display = 'block';
+            
+            container.innerHTML = '';
+            container.appendChild(message);
+            
+            // Scroll to message
+            message.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Auto-hide success messages
+            if (type === 'success') {
+                setTimeout(() => {
+                    message.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        function openTerms() {
+            window.open('terms-of-service.html', '_blank');
+        }
+
+        function openPrivacy() {
+            window.open('privacy-policy.html', '_blank');
+        }
+
+        // Make functions globally available
+        window.nextStep = nextStep;
+        window.previousStep = previousStep;
+        window.openTerms = openTerms;
+        window.openPrivacy = openPrivacy;
+    </script>
+</body>
+</html>
