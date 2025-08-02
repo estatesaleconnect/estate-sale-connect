@@ -23,7 +23,9 @@
     "payments",
     "authentication",
     "jwt",
-    "security"
+    "security",
+    "estate-sales",
+    "lead-generation"
   ],
   "author": "Estate Sale Connect",
   "license": "ISC",
