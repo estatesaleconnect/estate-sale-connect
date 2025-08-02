@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - Estate Sale Connect</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .success-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 50px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #bbf7d0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #10b981, #059669, #047857);
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 4rem;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+            animation: successPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #065f46;
+            margin-bottom: 20px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .success-message {
+            font-size: 1.2rem;
+            color: #374151;
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .email-info {
+            background: #f8fafc;
+            border: 2px solid #e0f2fe;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .email-info h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .email-info p {
+            color: #4b5563;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .email-address {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            font-weight: 600;
+            color: #1e40af;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+
+        .next-steps {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-steps ol {
+            color: #374151;
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .next-steps li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .next-steps .highlight {
+            background: #dbeafe;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f1f5f9;
+            border-color: #d1d5db;
+        }
+
+        .support-info {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+
+        .support-info a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .support-info a:hover {
+            text-decoration: underline;
+        }
+
+        .troubleshooting {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .troubleshooting h4 {
+            color: #d97706;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .troubleshooting ul {
+            color: #92400e;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            padding-left: 20px;
+        }
+
+        .troubleshooting li {
+            margin-bottom: 6px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .success-card {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+
+            .success-title {
+                font-size: 2.2rem;
+            }
+
+            .success-message {
+                font-size: 1.1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">
+                ✅
+            </div>
+            
+            <h1 class="success-title">Registration Successful!</h1>
+            <p class="success-message">
+                Welcome to Estate Sale Connect! Your account has been created and is pending verification. 
+            </p>
+
+            <div class="email-info">
+                <h3>📧 Check Your Email</h3>
+                <p>We've sent a verification email to:</p>
+                <div class="email-address" id="userEmail">
+                    Loading...
+                </div>
+                <p>Click the verification link in the email to activate your account and gain access to estate sale leads.</p>
+                <p><strong>Important:</strong> The verification link will expire in 24 hours.</p>
+            </div>
+
+            <div class="next-steps">
+                <h3>🎯 What Happens Next?</h3>
+                <ol>
+                    <li><span class="highlight">Verify your email</span> - Click the link we just sent you</li>
+                    <li><span class="highlight">Business verification</span> - Our team reviews your information (1-2 business days)</li>
+                    <li><span class="highlight">Account approval</span> - You'll receive an approval email once verified</li>
+                    <li><span class="highlight">Start browsing leads</span> - Begin your 7-day free trial immediately</li>
+                    <li><span class="highlight">Purchase your first lead</span> - Connect with families in need</li>
+                </ol>
+            </div>
+
+            <div class="troubleshooting">
+                <h4>⚠️ Didn't receive the email?</h4>
+                <ul>
+                    <li>Check your spam/junk folder</li>
+                    <li>Make sure you entered the correct email address</li>
+                    <li>Wait a few minutes - emails can sometimes be delayed</li>
+                    <li>Add info@estatesaleconnect.com to your safe sender list</li>
+                    <li>Contact support if you still don't receive it after 15 minutes</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="#" onclick="resendEmail()" class="btn btn-primary" id="resendBtn">
+                    📧 Resend Verification Email
+                </a>
+                <a href="company-signin.html" class="btn btn-secondary">
+                    🔐 Go to Sign In
+                </a>
+                <a href="index.html" class="btn btn-secondary">
+                    🏠 Back to Homepage
+                </a>
+            </div>
+
+            <div class="support-info">
+                <p>
+                    Need help getting started? Our support team is here for you.<br>
+                    Email us at <a href="mailto:info@estatesaleconnect.com">info@estatesaleconnect.com</a> 
+                    or call <a href="tel:+1-555-ESTATE">1-555-ESTATE</a>
+                </p>
+                <p style="margin-top: 15px; font-size: 0.8rem; color: #9ca3af;">
+                    By creating an account, you've joined a network of professional estate sale companies 
+                    committed to helping families during difficult transitions with compassion and expertise.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get email from URL parameter
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            
+            if (email) {
+                document.getElementById('userEmail').textContent = decodeURIComponent(email);
+            } else {
+                document.getElementById('userEmail').textContent = 'your registered email address';
+            }
+        });
+
+        // Resend verification email
+        async function resendEmail() {
+            const resendBtn = document.getElementById('resendBtn');
+            const originalText = resendBtn.innerHTML;
+            
+            // Get email from URL or user input
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            
+            if (!email) {
+                alert('Email address not found. Please go back to the signup page.');
+                return;
+            }
+
+            // Show loading state
+            resendBtn.innerHTML = '⏳ Sending...';
+            resendBtn.style.pointerEvents = 'none';
+
+            try {
+                const response = await fetch('/.netlify/functions/resend-verification', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: decodeURIComponent(email) })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Show success message
+                    resendBtn.innerHTML = '✅ Email Sent!';
+                    resendBtn.style.background = '#10b981';
+                    
+                    // Reset after 3 seconds
+                    setTimeout(() => {
+                        resendBtn.innerHTML = originalText;
+                        resendBtn.style.background = '';
+                        resendBtn.style.pointerEvents = '';
+                    }, 3000);
+                } else {
+                    throw new Error(result.error || 'Failed to resend email');
+                }
+            } catch (error) {
+                console.error('Resend email error:', error);
+                resendBtn.innerHTML = '❌ Failed';
+                resendBtn.style.background = '#ef4444';
+                
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    resendBtn.innerHTML = originalText;
+                    resendBtn.style.background = '';
+                    resendBtn.style.pointerEvents = '';
+                }, 3000);
+                
+                alert('Failed to resend email. Please contact support if the problem persists.');
+            }
+        }
+
+        // Make function globally available
+        window.resendEmail = resendEmail;
+    </script>
+</body>
+</html>
