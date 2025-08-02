@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estate Sale Connect - Company Portal</title>
     
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' /.netlify/functions/ https://js.stripe.com">
+    <!-- Security Headers - FIXED CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src 'self' https://*.netlify.app https://*.netlify.com https://js.stripe.com; frame-src https://js.stripe.com">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     
     <!-- Google Fonts -->
@@ -148,46 +147,16 @@
             font-size: 0.9rem;
         }
 
-        /* Subscription Banner */
-        .subscription-banner {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 30px;
-            border-radius: 12px;
-            display: none;
-        }
-
-        .subscription-banner.show {
-            display: block;
-        }
-
-        .subscription-banner h3 {
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
-
-        .subscription-banner p {
-            margin-bottom: 15px;
-            opacity: 0.9;
-        }
-
-        .subscribe-btn {
-            background: white;
-            color: #f59e0b;
-            padding: 12px 24px;
-            border: none;
+        /* Debug Info */
+        .debug-info {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
             border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .subscribe-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+            color: #374151;
+            font-family: monospace;
         }
 
         /* Main Content */
@@ -392,85 +361,6 @@
             position: relative;
         }
 
-        .photo-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,0,0,0.6);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            z-index: 5;
-        }
-
-        .photo-nav:hover {
-            background: rgba(0,0,0,0.8);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .photo-nav.prev {
-            left: 8px;
-        }
-
-        .photo-nav.next {
-            right: 8px;
-        }
-
-        .photo-nav:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .photo-nav:disabled:hover {
-            transform: translateY(-50%) scale(1);
-            background: rgba(0,0,0,0.6);
-        }
-
-        .photo-indicators {
-            position: absolute;
-            bottom: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 6px;
-            z-index: 5;
-        }
-
-        .photo-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .photo-dot.active {
-            background: white;
-            transform: scale(1.2);
-        }
-
-        .photo-count-badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            z-index: 5;
-        }
-
         .no-photos {
             display: flex;
             align-items: center;
@@ -581,7 +471,7 @@
             flex-direction: column;
         }
 
-        .purchase-btn, .exclusive-btn {
+        .purchase-btn, .exclusive-btn, .subscribe-btn {
             color: white;
             padding: 8px 12px;
             border: none;
@@ -607,6 +497,15 @@
 
         .exclusive-btn:hover {
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            transform: translateY(-1px);
+        }
+
+        .subscribe-btn {
+            background: #8b5cf6;
+        }
+
+        .subscribe-btn:hover {
+            background: #7c3aed;
             transform: translateY(-1px);
         }
 
@@ -637,39 +536,6 @@
             margin-bottom: 4px;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 40px;
-        }
-
-        .pagination button {
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .pagination button:hover {
-            background: #f3f4f6;
-        }
-
-        .pagination button.active {
-            background: #3b82f6;
-            color: white;
-            border-color: #3b82f6;
-        }
-
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
         /* Error Messages */
         .error-message {
             background: #fef2f2;
@@ -680,29 +546,6 @@
             border-radius: 8px;
             text-align: center;
             display: none;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .search-form {
-                grid-template-columns: 1fr;
-            }
-
-            .leads-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
         }
 
         /* Loading State */
@@ -726,6 +569,29 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .leads-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -758,15 +624,13 @@
                 🔒 <strong>Secure Connection:</strong> Your data is protected with enterprise-grade encryption and authentication
             </div>
 
+            <!-- Debug Info -->
+            <div class="debug-info" id="debugInfo">
+                🔧 <strong>Debug:</strong> <span id="debugText">Initializing portal...</span>
+            </div>
+
             <!-- Error Message -->
             <div id="errorMessage" class="error-message"></div>
-
-            <!-- Subscription Banner -->
-            <div class="subscription-banner" id="subscriptionBanner">
-                <h3>🚀 Unlock Full Access to Estate Sale Leads</h3>
-                <p>Subscribe for $24.99/month to access all leads and contact information immediately</p>
-                <button class="subscribe-btn" onclick="handleSubscription()">Start Subscription</button>
-            </div>
 
             <!-- Portal Header -->
             <div class="portal-header">
@@ -843,11 +707,6 @@
                 <div class="leads-grid" id="leadsGrid">
                     <!-- Leads will be populated here by JavaScript -->
                 </div>
-
-                <!-- Pagination -->
-                <div class="pagination" id="pagination">
-                    <!-- Pagination will be populated by JavaScript -->
-                </div>
             </div>
         </div>
     </main>
@@ -856,11 +715,18 @@
         // Global variables
         let currentLeads = [];
         let filteredLeads = [];
-        let currentPage = 1;
-        const leadsPerPage = 12;
         let hasActiveSubscription = false;
         let currentUser = null;
         let authToken = null;
+
+        // Debug function
+        function updateDebug(message) {
+            const debugText = document.getElementById('debugText');
+            if (debugText) {
+                debugText.textContent = message;
+            }
+            console.log('🔧 DEBUG:', message);
+        }
 
         // Initialize the portal
         document.addEventListener('DOMContentLoaded', function() {
@@ -870,12 +736,12 @@
         // Initialize portal with authentication check
         async function initializeSecurePortal() {
             try {
-                console.log('Initializing secure portal...');
+                updateDebug('Initializing secure portal...');
                 
                 // Check authentication first
                 const authResult = await checkAuthentication();
                 if (!authResult.success) {
-                    console.log('Authentication failed, redirecting to sign-in');
+                    updateDebug('Authentication failed, redirecting to sign-in');
                     window.location.href = 'company-signin.html';
                     return;
                 }
@@ -883,7 +749,7 @@
                 currentUser = authResult.user;
                 authToken = authResult.token;
                 
-                console.log('Authenticated user:', currentUser.companyName);
+                updateDebug('Authenticated user: ' + currentUser.companyName);
                 
                 // Update UI with user info
                 updateUserInterface();
@@ -894,9 +760,9 @@
                 // Setup event listeners
                 setupEventListeners();
                 
-                console.log('Secure portal initialized successfully');
+                updateDebug('Secure portal initialized successfully');
             } catch (error) {
-                console.error('Failed to initialize secure portal:', error);
+                updateDebug('Failed to initialize portal: ' + error.message);
                 showError('Failed to initialize portal. Please refresh the page or sign in again.');
             }
         }
@@ -911,6 +777,8 @@
                     return { success: false, error: 'No authentication found' };
                 }
 
+                updateDebug('Found stored token, verifying...');
+
                 // Verify token with server
                 const response = await fetch('/.netlify/functions/auth-verify', {
                     method: 'POST',
@@ -922,7 +790,7 @@
                 });
 
                 if (!response.ok) {
-                    // Token is invalid, clear storage
+                    updateDebug('Token verification failed: ' + response.status);
                     localStorage.removeItem('auth_token');
                     localStorage.removeItem('company_user');
                     return { success: false, error: 'Invalid authentication' };
@@ -931,11 +799,13 @@
                 const data = await response.json();
                 
                 if (!data.valid) {
+                    updateDebug('Token invalid');
                     localStorage.removeItem('auth_token');
                     localStorage.removeItem('company_user');
                     return { success: false, error: 'Token expired' };
                 }
 
+                updateDebug('✅ Authentication verified');
                 return { 
                     success: true, 
                     user: data.user,
@@ -943,7 +813,7 @@
                 };
 
             } catch (error) {
-                console.error('Authentication check failed:', error);
+                updateDebug('Authentication check error: ' + error.message);
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('company_user');
                 return { success: false, error: 'Authentication error' };
@@ -962,18 +832,15 @@
             
             // Update subscription status
             const subscriptionStatus = document.getElementById('subscriptionStatus');
-            const subscriptionBanner = document.getElementById('subscriptionBanner');
             
             if (currentUser.subscriptionStatus === 'active') {
                 hasActiveSubscription = true;
                 subscriptionStatus.textContent = 'Active Subscription';
                 subscriptionStatus.className = 'subscription-status status-active';
-                subscriptionBanner.classList.remove('show');
             } else {
                 hasActiveSubscription = false;
                 subscriptionStatus.textContent = 'No Subscription';
                 subscriptionStatus.className = 'subscription-status status-inactive';
-                subscriptionBanner.classList.add('show');
             }
         }
 
@@ -981,7 +848,7 @@
         async function loadLeadsSecurely() {
             try {
                 showLoading();
-                console.log('Loading leads securely...');
+                updateDebug('Loading leads securely...');
 
                 const response = await fetch('/.netlify/functions/secure-leads-api', {
                     method: 'GET',
@@ -991,9 +858,10 @@
                     }
                 });
 
+                updateDebug('Response status: ' + response.status);
+
                 if (response.status === 401) {
-                    // Authentication failed
-                    console.log('Authentication expired, redirecting to sign-in');
+                    updateDebug('Authentication expired, redirecting to sign-in');
                     localStorage.removeItem('auth_token');
                     localStorage.removeItem('company_user');
                     window.location.href = 'company-signin.html';
@@ -1001,8 +869,8 @@
                 }
 
                 if (response.status === 429) {
-                    // Rate limited
                     const data = await response.json();
+                    updateDebug('Rate limited: ' + data.retryAfter);
                     showError(`Too many requests. Please try again in ${Math.ceil(data.retryAfter / 60)} minutes.`);
                     hideLoading();
                     return;
@@ -1018,16 +886,12 @@
                     throw new Error(result.error || 'Failed to load leads');
                 }
 
-                console.log(`✅ Securely loaded ${result.data.length} leads`);
+                updateDebug(`✅ Loaded ${result.data.length} leads`);
 
                 // Process leads
                 currentLeads = result.data.map(lead => ({
                     ...lead,
-                    // Add client-side computed properties
-                    coordinates: { lat: 0, lng: 0 },
-                    // Safely handle photos
-                    photos: Array.isArray(lead.photos) ? lead.photos : 
-                            (lead.photos ? lead.photos.split(' ').filter(url => url.trim()) : [])
+                    coordinates: { lat: 0, lng: 0 }
                 }));
 
                 filteredLeads = [...currentLeads];
@@ -1036,9 +900,9 @@
                 updateStats();
 
             } catch (error) {
-                console.error('Error loading leads securely:', error);
+                updateDebug('❌ Error loading leads: ' + error.message);
                 hideLoading();
-                showError('Failed to load leads. Please refresh the page or contact support.');
+                showError('Failed to load leads: ' + error.message);
             }
         }
 
@@ -1051,76 +915,38 @@
         // Handle search form submission
         function handleSearch(event) {
             event.preventDefault();
-            
-            const zipCode = document.getElementById('zipCode').value;
-            const radius = parseInt(document.getElementById('radius').value) || 25;
-            const timeline = document.getElementById('timeline').value;
-
-            showLoading();
-            
-            // Simulate search delay for UX
-            setTimeout(() => {
-                filterLeads(zipCode, radius, timeline);
-                hideLoading();
-                displayLeads();
-                updateStats();
-            }, 800);
-        }
-
-        // Filter leads based on search criteria (client-side filtering)
-        function filterLeads(zipCode, radius, timeline) {
-            filteredLeads = currentLeads.filter(lead => {
-                if (timeline && lead.timeline !== timeline) {
-                    return false;
-                }
-
-                if (zipCode) {
-                    const leadZip = parseInt(lead.zipCode);
-                    const searchZip = parseInt(zipCode);
-                    const zipDiff = Math.abs(leadZip - searchZip);
-                    
-                    // Simple distance approximation
-                    if (zipDiff > (radius / 10)) {
-                        return false;
-                    }
-                }
-
-                return true;
-            });
-
-            currentPage = 1;
+            updateDebug('Performing search...');
+            displayLeads();
+            updateStats();
         }
 
         // Display leads in the grid
         function displayLeads() {
             const leadsGrid = document.getElementById('leadsGrid');
-            const startIndex = (currentPage - 1) * leadsPerPage;
-            const endIndex = startIndex + leadsPerPage;
-            const leadsToShow = filteredLeads.slice(startIndex, endIndex);
 
             leadsGrid.innerHTML = '';
 
-            if (leadsToShow.length === 0) {
+            if (currentLeads.length === 0) {
                 leadsGrid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #6b7280;">
                         <h3 style="margin-bottom: 10px;">No leads found</h3>
-                        <p>Try adjusting your search criteria or check back later for new leads</p>
+                        <p>Check back later for new leads or adjust your search criteria</p>
                     </div>
                 `;
                 return;
             }
 
-            leadsToShow.forEach(lead => {
-                const leadCard = createSecureLeadCard(lead);
+            currentLeads.forEach(lead => {
+                const leadCard = createLeadCard(lead);
                 leadsGrid.appendChild(leadCard);
             });
 
-            updatePagination();
             updateResultCount();
+            updateDebug(`Displayed ${currentLeads.length} leads`);
         }
 
-        // Create secure lead card element
-        function createSecureLeadCard(lead) {
+        // Create lead card element
+        function createLeadCard(lead) {
             const card = document.createElement('div');
             const isExclusiveAvailable = lead.isInExclusiveWindow;
             
@@ -1132,7 +958,7 @@
             // Create photo gallery HTML
             const photosHtml = createPhotoGallery(lead.photos, lead.id);
 
-            // Determine contact info display (server already handles this)
+            // Determine contact info display
             const contactDisplay = hasActiveSubscription && !lead.exclusivePurchasedBy ? 
                 `${escapeHtml(lead.firstName)} ${escapeHtml(lead.lastName)}` : 
                 'Subscribe to view';
@@ -1240,23 +1066,11 @@
                 `<div class="photo-slide" style="background-image: url('${escapeHtml(photo)}')"></div>`
             ).join('');
 
-            const indicatorsHtml = photos.length > 1 ? photos.map((_, index) => 
-                `<div class="photo-dot ${index === 0 ? 'active' : ''}" onclick="goToSlide('${galleryId}', ${index})"></div>`
-            ).join('') : '';
-
-            const navButtons = photos.length > 1 ? `
-                <button class="photo-nav prev" onclick="previousPhoto('${galleryId}')" ${photos.length <= 1 ? 'disabled' : ''}>‹</button>
-                <button class="photo-nav next" onclick="nextPhoto('${galleryId}')" ${photos.length <= 1 ? 'disabled' : ''}>›</button>
-            ` : '';
-
             return `
                 <div class="lead-photos">
                     <div class="photo-gallery" id="${galleryId}" data-current="0" data-total="${photos.length}">
                         ${slidesHtml}
                     </div>
-                    ${navButtons}
-                    ${photos.length > 1 ? `<div class="photo-indicators">${indicatorsHtml}</div>` : ''}
-                    ${photos.length > 1 ? `<div class="photo-count-badge">${photos.length} photos</div>` : ''}
                 </div>
             `;
         }
@@ -1267,7 +1081,6 @@
             
             if (confirm('Are you sure you want to logout?')) {
                 try {
-                    // Call secure logout endpoint
                     await fetch('/.netlify/functions/auth-logout', {
                         method: 'POST',
                         headers: {
@@ -1276,14 +1089,10 @@
                     });
                 } catch (error) {
                     console.error('Logout API call failed:', error);
-                    // Continue with client-side logout anyway
                 }
                 
-                // Clear local storage
                 localStorage.removeItem('auth_token');
                 localStorage.removeItem('company_user');
-                
-                // Redirect to sign-in
                 window.location.href = 'company-signin.html';
             }
         }
@@ -1295,7 +1104,6 @@
             errorDiv.style.display = 'block';
             errorDiv.scrollIntoView({ behavior: 'smooth' });
             
-            // Auto-hide after 10 seconds
             setTimeout(() => {
                 errorDiv.style.display = 'none';
             }, 10000);
@@ -1345,7 +1153,7 @@
         }
 
         function updateStats() {
-            const totalAvailable = filteredLeads.filter(l => !l.exclusivePurchasedBy).length;
+            const totalAvailable = currentLeads.filter(l => !l.exclusivePurchasedBy).length;
             const newToday = currentLeads.filter(l => 
                 new Date(l.dateSubmitted).toDateString() === new Date().toDateString()
             ).length;
@@ -1355,49 +1163,7 @@
         }
 
         function updateResultCount() {
-            document.getElementById('resultCount').textContent = filteredLeads.length;
-        }
-
-        function updatePagination() {
-            const pagination = document.getElementById('pagination');
-            const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
-            
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let paginationHtml = '';
-            
-            paginationHtml += `
-                <button onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
-                    Previous
-                </button>
-            `;
-            
-            for (let i = 1; i <= totalPages; i++) {
-                paginationHtml += `
-                    <button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">
-                        ${i}
-                    </button>
-                `;
-            }
-            
-            paginationHtml += `
-                <button onclick="goToPage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
-                    Next
-                </button>
-            `;
-            
-            pagination.innerHTML = paginationHtml;
-        }
-
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredLeads.length / leadsPerPage);
-            if (page >= 1 && page <= totalPages) {
-                currentPage = page;
-                displayLeads();
-            }
+            document.getElementById('resultCount').textContent = currentLeads.length;
         }
 
         // Refresh leads
@@ -1421,61 +1187,11 @@
             }
         }
 
-        // Photo gallery functions (same as before)
-        function nextPhoto(galleryId) {
-            const gallery = document.getElementById(galleryId);
-            if (!gallery) return;
-            
-            const current = parseInt(gallery.dataset.current);
-            const total = parseInt(gallery.dataset.total);
-            const next = (current + 1) % total;
-            
-            goToSlide(galleryId, next);
-        }
-
-        function previousPhoto(galleryId) {
-            const gallery = document.getElementById(galleryId);
-            if (!gallery) return;
-            
-            const current = parseInt(gallery.dataset.current);
-            const total = parseInt(gallery.dataset.total);
-            const prev = (current - 1 + total) % total;
-            
-            goToSlide(galleryId, prev);
-        }
-
-        function goToSlide(galleryId, slideIndex) {
-            const gallery = document.getElementById(galleryId);
-            if (!gallery) return;
-            
-            const total = parseInt(gallery.dataset.total);
-            if (slideIndex < 0 || slideIndex >= total) return;
-            
-            gallery.style.transform = `translateX(-${slideIndex * 100}%)`;
-            gallery.dataset.current = slideIndex;
-            
-            const card = gallery.closest('.lead-card');
-            const indicators = card.querySelectorAll('.photo-dot');
-            indicators.forEach((dot, index) => {
-                dot.classList.toggle('active', index === slideIndex);
-            });
-            
-            const prevBtn = card.querySelector('.photo-nav.prev');
-            const nextBtn = card.querySelector('.photo-nav.next');
-            
-            if (prevBtn) prevBtn.disabled = slideIndex === 0;
-            if (nextBtn) nextBtn.disabled = slideIndex === total - 1;
-        }
-
         // Make functions globally available
         window.handleSubscription = handleSubscription;
         window.handleExclusivePurchase = handleExclusivePurchase;
         window.handleContactLead = handleContactLead;
-        window.goToPage = goToPage;
         window.refreshLeads = refreshLeads;
-        window.nextPhoto = nextPhoto;
-        window.previousPhoto = previousPhoto;
-        window.goToSlide = goToSlide;
         window.handleLogout = handleLogout;
     </script>
 </body>
